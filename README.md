@@ -2,7 +2,12 @@
 
 A simple TypeScript boilerplate for a Discord bot.
 
-## Setup
+### Prerequisites
+
+- [NodeJS 12+](https://nodejs.org/en/download/)
+- [TypeScript](https://www.typescriptlang.org/#installation)
+
+### Setup
 
 - clone the repo
 
