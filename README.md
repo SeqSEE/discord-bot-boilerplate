@@ -7,7 +7,7 @@ A simple TypeScript boilerplate for a Discord bot.
 - clone the repo
 
 ```
-git clone https://github.com/SeqSEE/discord-bot-boilerplate.gi
+git clone https://github.com/SeqSEE/discord-bot-boilerplate.git
 ```
 
 - install the dependencies
