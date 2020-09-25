@@ -4,8 +4,8 @@
   "description": "TypeScript boiler plate for Discord Bots",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc && cp default.env dist/.env",
-    "run": "node ./dist/index.js"
+    "build": "tsc",
+    "start": "node ./dist/index.js"
   },
   "author": "SeqSEE",
   "license": "MIT",
