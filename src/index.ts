@@ -78,7 +78,7 @@ if (process.env.API_KEY == undefined) {
           )}`
         );
       client
-        .user!.setStatus('idle')
+        .user!.setStatus('online')
         .catch(console.log)
         .then(() => {
           if (((process.env.DEBUG as unknown) as number) === 1) console.log;
