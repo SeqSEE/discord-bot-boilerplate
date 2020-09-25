@@ -60,7 +60,7 @@ export default class CommandHandler {
           }
         });
       }
-      if (process.env.DEBUG)
+      if (((process.env.DEBUG as unknown) as number) === 1)
         console.log(`${Date()} registered new command ${command}`);
     } catch (e) {
       console.log(`${Date()} ERROR: ${e}`);
