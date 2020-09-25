@@ -26,10 +26,6 @@ npm install
 npm run build
 ```
 
-- edit the config
-
-dist/ .env
-
 - start the bot
 
 ```
