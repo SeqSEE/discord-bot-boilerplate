@@ -44,7 +44,9 @@ export default class DiscordUtil {
   }
 
   public setStatus(data: PresenceData): void {
-    console.log(`${Date()} setStatus(${JSON.stringify(data)}: PresenceData)`);
+    this.getClient().user!.setPresence(data);
+    if (((process.env.DEBUG as unknown) as number) === 1)
+      console.log(`${Date()} setStatus(${JSON.stringify(data)}: PresenceData)`);
   }
 
   public splitMessage(

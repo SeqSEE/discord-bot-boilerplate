@@ -32,31 +32,6 @@ export async function ping(
   let c = await discord.getClient().channels.fetch(messageObj.channel);
   let chan: TextChannel | null =
     c instanceof TextChannel ? (c as TextChannel) : null;
-  let iconURL = `https://git.cryptechcraft.xyz/uploads/-/system/project/avatar/13/cryptech.png`;
-  let wikiEmbed = {
-    embed: {
-      color: 8359053,
-      author: {
-        name: `CryptechCraft`,
-        icon_url: iconURL,
-      },
-      title: `**CryptechCraft Wiki**`,
-      url: 'https://git.cryptechcraft.xyz/cryptechcraft/xyz/-/wikis/home',
-      description: `Information about plugins and commands can be found here.`,
-      fields: [],
-      timestamp: new Date(),
-      image: {
-        url: '',
-      },
-      footer: {
-        iconURL: `https://cdn.discordapp.com/avatars/${
-          discord.getClient().user!.id
-        }/${discord.getClient().user!.avatar}.png`,
-        text: discord.getClient().user!.username,
-      },
-    },
-  };
-
-  if (chan) chan.send(wikiEmbed);
-  else if (user) user.send(wikiEmbed);
+  if (chan) chan.send('pong!');
+  else if (user) user.send('pong!');
 }

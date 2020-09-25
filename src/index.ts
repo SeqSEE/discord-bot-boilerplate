@@ -26,7 +26,6 @@ import MessageHandler from './MessageHandler';
 import CommandHandler from './command/CommandHandler';
 import DiscordHandler from './DiscordHandler';
 import Commands from './Commands';
-import { cpuUsage } from 'process';
 
 const conf = dotenv.config();
 let start;
@@ -62,7 +61,8 @@ if (process.env.API_KEY == undefined) {
   start = async () => {
     await commands.registerCommands();
     client.on('ready', async () => {
-      console.log(`Logged in as ${client.user!.tag}!`);
+      if (((process.env.DEBUG as unknown) as number) === 1)
+        console.log(`Logged in as ${client.user!.tag}!`);
       let chan: TextChannel | null =
         (await client.channels.fetch(
           process.env.DEFAULT_CHAN as string
@@ -81,7 +81,7 @@ if (process.env.API_KEY == undefined) {
         .user!.setStatus('idle')
         .catch(console.log)
         .then(() => {
-          console.log;
+          if (((process.env.DEBUG as unknown) as number) === 1) console.log;
           discord.util.setStatus({
             status: 'online',
             activity: {

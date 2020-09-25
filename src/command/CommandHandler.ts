@@ -60,7 +60,8 @@ export default class CommandHandler {
           }
         });
       }
-      console.log(`${Date()} registered new command ${command}`);
+      if (process.env.DEBUG)
+        console.log(`${Date()} registered new command ${command}`);
     } catch (e) {
       console.log(`${Date()} ERROR: ${e}`);
     }

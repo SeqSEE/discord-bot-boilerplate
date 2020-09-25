@@ -2,9 +2,10 @@
   "name": "discord-bot-boilerplate",
   "version": "1.0.0",
   "description": "TypeScript boiler plate for Discord Bots",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc && cp default.env dist/.env",
+    "run": "node ./dist/index.js"
   },
   "author": "SeqSEE",
   "license": "MIT",
