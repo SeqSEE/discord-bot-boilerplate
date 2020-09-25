@@ -44,7 +44,7 @@ if (process.env.API_KEY == undefined) {
     console.log(`SUPER_ADMIN is undefined`);
     process.exit(1);
   };
-} else if (process.env.DISCORD_CMD_PREFIX == undefined) {
+} else if (process.env.CMD_PREFIX == undefined) {
   start = () => {
     console.log(`CMD_PREFIX is undefined`);
     process.exit(1);
