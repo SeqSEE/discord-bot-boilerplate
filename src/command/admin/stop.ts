@@ -20,19 +20,26 @@
  THE SOFTWARE.
  */
 
-import { Client } from 'discord.js';
-import DiscordUtil from './util/DiscordUtil';
+import DiscordHandler from '../../internal/DiscordHandler';
+import MessageObject from '../../interface/MessageObject';
+import { TextChannel } from 'discord.js';
 
-export default class DiscordHandler {
-  public util: DiscordUtil;
-  private client: Client;
-
-  constructor(client: Client) {
-    this.client = client;
-    this.util = new DiscordUtil(client);
+export async function stop(
+  discord: DiscordHandler,
+  messageObj: MessageObject
+): Promise<void> {
+  let user = await discord.getClient().users.fetch(messageObj.author);
+  let c = await discord.getClient().channels.fetch(messageObj.channel);
+  let chan: TextChannel | null =
+    c instanceof TextChannel ? (c as TextChannel) : null;
+  if (messageObj.author !== process.env.SUPER_ADMIN) {
+    if (chan) chan.send('Error: Permission Denied');
+    else if (user) user.send('Error: Permission Denied');
+    return;
   }
 
-  public getClient(): Client {
-    return this.client;
-  }
+  if (chan) chan.send('Goodbye');
+  else if (user) user.send('Goodbye');
+  discord.getClient().destroy();
+  process.exit(0);
 }

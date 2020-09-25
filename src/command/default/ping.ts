@@ -20,7 +20,7 @@
  THE SOFTWARE.
  */
 
-import DiscordHandler from '../../DiscordHandler';
+import DiscordHandler from '../../internal/DiscordHandler';
 import MessageObject from '../../interface/MessageObject';
 import { TextChannel } from 'discord.js';
 

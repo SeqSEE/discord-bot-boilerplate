@@ -20,12 +20,12 @@
  THE SOFTWARE.
  */
 
-import CommandRegistry from './command/CommandRegistry';
-import CommandHandler from './command/CommandHandler';
-import DiscordHandler from './DiscordHandler';
+import CommandRegistry from './internal/CommandRegistry';
+import CommandHandler from './internal/CommandHandler';
+import DiscordHandler from './internal/DiscordHandler';
 import MessageObject from './interface/MessageObject';
 import { ping } from './command/default/ping';
-import { stop } from './command/default/stop';
+import { stop } from './command/admin/stop';
 
 export default class Commands extends CommandRegistry {
   constructor(discord: DiscordHandler, cmdHandler: CommandHandler) {

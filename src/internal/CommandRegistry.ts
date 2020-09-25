@@ -23,7 +23,7 @@
 import CommandHandler from './CommandHandler';
 import MessageObject from '../interface/MessageObject';
 import Command from './Command';
-import DiscordHandler from '../DiscordHandler';
+import DiscordHandler from '../internal/DiscordHandler';
 
 export default abstract class CommandRegistry {
   private discord: DiscordHandler;

@@ -20,8 +20,8 @@
  THE SOFTWARE.
  */
 
-import CommandHandler from './command/CommandHandler';
-import Command from './command/Command';
+import CommandHandler from './CommandHandler';
+import Command from './Command';
 
 export default class MessageHandler {
   private commandHandler: CommandHandler;

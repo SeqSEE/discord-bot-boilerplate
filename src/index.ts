@@ -20,6 +20,70 @@
  THE SOFTWARE.
  */
 
-import init from './init';
+import init from './internal/init';
+import dotenv from 'dotenv';
+import { Client, TextChannel, PresenceData, Message } from 'discord.js';
+import DiscordHandler from './internal/DiscordHandler';
+import CommandHandler from './internal/CommandHandler';
+import MessageHandler from './internal/MessageHandler';
+import Commands from './Commands';
 
-init();
+let start = async () => {
+  const envConf = dotenv.config();
+  const client: Client = new Client();
+  const discord: DiscordHandler = new DiscordHandler(client);
+  const cmdHandler: CommandHandler = new CommandHandler(
+    <string>process.env.CMD_PREFIX
+  );
+  const msgHandler: MessageHandler = new MessageHandler(cmdHandler);
+  const commands = new Commands(discord, cmdHandler);
+  await commands.registerCommands();
+  client.on('ready', async () => {
+    if (((process.env.DEBUG as unknown) as number) === 1)
+      console.log(`Logged in as ${client.user!.tag}!`);
+    let chan: TextChannel | null =
+      (await client.channels.fetch(
+        process.env.DEFAULT_CHAN as string
+      )) instanceof TextChannel
+        ? ((await client.channels.fetch(
+            process.env.DEFAULT_CHAN as string
+          )) as TextChannel)
+        : null;
+    if (chan)
+      chan.send(
+        `Awww comeon, I wanna sleep for just a bit more it is only ${Math.floor(
+          Date.now() / 1000
+        )}`
+      );
+    client
+      .user!.setStatus('online')
+      .catch(console.log)
+      .then(() => {
+        if (((process.env.DEBUG as unknown) as number) === 1) console.log;
+        discord.util.setStatus({
+          status: 'online',
+          activity: {
+            name: 'Like a BOT',
+            type: 'PLAYING',
+          },
+          afk: true,
+        } as PresenceData);
+      });
+  });
+  client.on('message', (msg: Message) => {
+    if (msg.author.bot) return;
+    msgHandler.handleMessage({
+      channel: msg.channel.id,
+      author: msg.author.id,
+      content: msg.content,
+    });
+  });
+  try {
+    client.login(process.env.API_KEY);
+  } catch (e) {
+    console.log(JSON.stringify(e));
+    process.exit(1);
+  }
+};
+
+init(start);
