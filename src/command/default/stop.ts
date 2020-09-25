@@ -20,27 +20,26 @@
  THE SOFTWARE.
  */
 
-import CommandRegistry from './command/CommandRegistry';
-import CommandHandler from './command/CommandHandler';
-import DiscordHandler from './DiscordHandler';
-import MessageObject from './interface/MessageObject';
-import { ping } from './command/default/ping';
-import { stop } from './command/default/stop';
+import DiscordHandler from '../../DiscordHandler';
+import MessageObject from '../../interface/MessageObject';
+import { TextChannel } from 'discord.js';
 
-export default class Commands extends CommandRegistry {
-  constructor(discord: DiscordHandler, cmdHandler: CommandHandler) {
-    super(discord, cmdHandler);
+export async function stop(
+  discord: DiscordHandler,
+  messageObj: MessageObject
+): Promise<void> {
+  let user = await discord.getClient().users.fetch(messageObj.author);
+  let c = await discord.getClient().channels.fetch(messageObj.channel);
+  let chan: TextChannel | null =
+    c instanceof TextChannel ? (c as TextChannel) : null;
+  if (messageObj.author !== process.env.SUPER_ADMIN) {
+    if (chan) chan.send('Error: Permission Denied');
+    else if (user) user.send('Error: Permission Denied');
+    return;
   }
-  public async registerCommands(): Promise<void> {
-    this.registerCommand('ping', [], async (messageObj: MessageObject) => {
-      if (((process.env.DEBUG as unknown) as number) === 1)
-        console.log(`${Date()} author: ${messageObj.author} command: ping`);
-      return ping(this.getDiscord(), messageObj);
-    });
-    this.registerCommand('stop', [], async (messageObj: MessageObject) => {
-      if (((process.env.DEBUG as unknown) as number) === 1)
-        console.log(`${Date()} author: ${messageObj.author} command: stop`);
-      return stop(this.getDiscord(), messageObj);
-    });
-  }
+
+  if (chan) chan.send('Goodbye');
+  else if (user) user.send('Goodbye');
+  discord.getClient().destroy();
+  process.exit(0);
 }
