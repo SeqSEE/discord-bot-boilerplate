@@ -4,6 +4,7 @@
   "description": "TypeScript boiler plate for Discord Bots",
   "main": "dist/index.js",
   "scripts": {
+    "clean": "rm -rf dist && rm -rf disabledcommands.json",
     "build": "tsc",
     "start": "node ./dist/index.js"
   },
