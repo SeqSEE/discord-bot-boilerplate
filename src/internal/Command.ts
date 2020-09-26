@@ -33,9 +33,9 @@ export default class Command {
     aliases: string[],
     handler: (messageObj: MessageObject) => void
   ) {
+    this.enabled = true;
     this.command = command;
     this.aliases = aliases;
-    this.enabled = true;
     this.handler = handler;
   }
 

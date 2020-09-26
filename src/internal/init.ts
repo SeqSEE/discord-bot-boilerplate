@@ -25,14 +25,16 @@ import dotenv from 'dotenv';
 
 const defaultConfig = './default.env';
 const config = './.env';
-
-export default async function init(start: () => void): Promise<void> {
+const disabledCommands = './disabledcommands.json';
+export default async function init(
+  start: (disabled: any) => void
+): Promise<void> {
   try {
     if (fs.existsSync(config)) {
       const envConf = dotenv.config();
       if (((process.env.DEBUG as unknown) as number) === 1)
         console.log(`Found .env configuration file`);
-      let s;
+      let s: (disabled: any) => void;
 
       if (process.env.API_KEY == undefined) {
         s = () => {
@@ -40,23 +42,33 @@ export default async function init(start: () => void): Promise<void> {
           process.exit(1);
         };
       } else if (process.env.DEFAULT_CHAN == undefined) {
-        s = () => {
+        s = ({}) => {
           console.log(`DEFAULT_CHAN is undefined`);
           process.exit(1);
         };
       } else if (process.env.SUPER_ADMIN == undefined) {
-        s = () => {
+        s = ({}) => {
           console.log(`SUPER_ADMIN is undefined`);
           process.exit(1);
         };
       } else if (process.env.CMD_PREFIX == undefined) {
-        s = () => {
+        s = ({}) => {
           console.log(`CMD_PREFIX is undefined`);
           process.exit(1);
         };
       } else {
         s = start;
-        s();
+        if (fs.existsSync(disabledCommands)) {
+          fs.readFile(disabledCommands, (err, data) => {
+            if (err) throw err;
+            const disabled = JSON.parse(data.toString('utf8'));
+            if (((process.env.DEBUG as unknown) as number) === 1)
+              console.log(`Disabled commands:\n ${disabled}`);
+            s(disabled);
+          });
+        } else {
+          s({});
+        }
       }
     } else {
       fs.copyFile(defaultConfig, config, (err) => {

@@ -24,14 +24,20 @@ import CommandHandler from './CommandHandler';
 import MessageObject from '../interface/MessageObject';
 import Command from './Command';
 import DiscordHandler from '../internal/DiscordHandler';
+import MessageHandler from './MessageHandler';
 
 export default abstract class CommandRegistry {
   private discord: DiscordHandler;
   private cmdHandler: CommandHandler;
-
-  constructor(discord: DiscordHandler, cmdHandler: CommandHandler) {
+  private msgHandler: MessageHandler;
+  constructor(
+    discord: DiscordHandler,
+    cmdHandler: CommandHandler,
+    msgHandler: MessageHandler
+  ) {
     this.discord = discord;
     this.cmdHandler = cmdHandler;
+    this.msgHandler = msgHandler;
   }
   public abstract async registerCommands(): Promise<void>;
 
@@ -71,5 +77,9 @@ export default abstract class CommandRegistry {
 
   public getDiscord(): DiscordHandler {
     return this.discord;
+  }
+
+  public getMessageHandler(): MessageHandler {
+    return this.msgHandler;
   }
 }

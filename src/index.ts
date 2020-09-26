@@ -28,7 +28,7 @@ import CommandHandler from './internal/CommandHandler';
 import MessageHandler from './internal/MessageHandler';
 import Commands from './Commands';
 
-let start = async () => {
+let start = async (disabled: any) => {
   const envConf = dotenv.config();
   const client: Client = new Client();
   const discord: DiscordHandler = new DiscordHandler(client);
@@ -36,8 +36,16 @@ let start = async () => {
     <string>process.env.CMD_PREFIX
   );
   const msgHandler: MessageHandler = new MessageHandler(cmdHandler);
-  const commands = new Commands(discord, cmdHandler);
+  const commands = new Commands(discord, cmdHandler, msgHandler);
   await commands.registerCommands();
+  Object.values(disabled).forEach((d) => {
+    let cmd = cmdHandler.getCommands().get(d as string);
+    if (cmd) {
+      cmd.setEnabled(false);
+      if (((process.env.DEBUG as unknown) as number) === 1)
+        console.log(`Disabled ${cmd}`);
+    }
+  });
   client.on('ready', async () => {
     if (((process.env.DEBUG as unknown) as number) === 1)
       console.log(`Logged in as ${client.user!.tag}!`);

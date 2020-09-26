@@ -24,23 +24,28 @@ import CommandRegistry from './internal/CommandRegistry';
 import CommandHandler from './internal/CommandHandler';
 import DiscordHandler from './internal/DiscordHandler';
 import MessageObject from './interface/MessageObject';
-import { ping } from './command/default/ping';
-import { stop } from './command/admin/stop';
-import { disablecommand } from './command/admin/disablecommand';
-import { enablecommand } from './command/admin/enablecommand';
+import { ping } from './commands/default/ping';
+import { stop } from './commands/admin/stop';
+import { disablecommand } from './commands/admin/disablecommand';
+import { enablecommand } from './commands/admin/enablecommand';
+import MessageHandler from './internal/MessageHandler';
 
 export default class Commands extends CommandRegistry {
-  constructor(discord: DiscordHandler, cmdHandler: CommandHandler) {
-    super(discord, cmdHandler);
+  constructor(
+    discord: DiscordHandler,
+    cmdHandler: CommandHandler,
+    msgHandler: MessageHandler
+  ) {
+    super(discord, cmdHandler, msgHandler);
   }
   public async registerCommands(): Promise<void> {
     this.registerCommand('ping', [], async (messageObj: MessageObject) => {
-      if (((process.env.DEBUG as unknown) as number) === 1)
+      if (Number(process.env.DEBUG) === 1)
         console.log(`${Date()} author: ${messageObj.author} command: ping`);
       return ping(this.getDiscord(), messageObj);
     });
     this.registerCommand('stop', [], async (messageObj: MessageObject) => {
-      if (((process.env.DEBUG as unknown) as number) === 1)
+      if (Number(process.env.DEBUG) === 1)
         console.log(`${Date()} author: ${messageObj.author} command: stop`);
       return stop(this.getDiscord(), messageObj);
     });
@@ -48,13 +53,13 @@ export default class Commands extends CommandRegistry {
       'enablecommand',
       ['encom'],
       async (messageObj: MessageObject) => {
-        if (((process.env.DEBUG as unknown) as number) === 1)
+        if (Number(process.env.DEBUG) === 1)
           console.log(
             `${Date()} author: ${messageObj.author} command: enablecommand`
           );
         return enablecommand(
           this.getDiscord(),
-          this.getCommandHandler(),
+          this.getMessageHandler(),
           messageObj
         );
       }
@@ -63,13 +68,13 @@ export default class Commands extends CommandRegistry {
       'disablecommand',
       ['discom'],
       async (messageObj: MessageObject) => {
-        if (((process.env.DEBUG as unknown) as number) === 1)
+        if (Number(process.env.DEBUG) === 1)
           console.log(
             `${Date()} author: ${messageObj.author} command: disablecommand`
           );
         return disablecommand(
           this.getDiscord(),
-          this.getCommandHandler(),
+          this.getMessageHandler(),
           messageObj
         );
       }

@@ -23,11 +23,14 @@
 import DiscordHandler from '../../internal/DiscordHandler';
 import MessageObject from '../../interface/MessageObject';
 import { TextChannel } from 'discord.js';
-import CommandHandler from '../../internal/CommandHandler';
+import fs from 'fs';
+import path from 'path';
+import Command from '../../internal/Command';
+import MessageHandler from '../../internal/MessageHandler';
 
 export async function disablecommand(
   discord: DiscordHandler,
-  cmdHandler: CommandHandler,
+  msgHandler: MessageHandler,
   messageObj: MessageObject
 ): Promise<void> {
   let user = await discord.getClient().users.fetch(messageObj.author);
@@ -43,38 +46,83 @@ export async function disablecommand(
   if (m.length < 2) {
     if (chan)
       chan.send(
-        `Error: Invalid arguments\nUsage:\n${cmdHandler.getCmdPrefix()}disablecommand <command>`
+        `Error: Invalid arguments\nUsage:\n${msgHandler
+          .getCommandHandler()
+          .getCmdPrefix()}disablecommand <command>`
       );
     else if (user)
       user.send(
-        `Error: Invalid arguments\nUsage:\n${cmdHandler.getCmdPrefix()}disablecommand <command>`
+        `Error: Invalid arguments\nUsage:\n${msgHandler.getCommandHandler()}disablecommand <command>`
       );
   } else {
     const cmd = m[1];
-    const command = cmdHandler.getCommands().get(cmd);
+    const command:
+      | Command
+      | undefined = msgHandler
+      .getCommandHandler()
+      .getCommands()
+      .get(`${msgHandler.getCommandHandler().getCmdPrefix()}${cmd}`);
     if (command) {
-      if (command.getName() != 'disablecommand' && !command.isEnabled()) {
+      if (
+        command.getName() != 'disablecommand' &&
+        command.getName() != 'enablecommand' &&
+        command.getName() != 'stop' &&
+        command.isEnabled()
+      ) {
         command.setEnabled(false);
-        if (chan) chan.send(`Disabled ${cmdHandler.getCmdPrefix()}${cmd}`);
-        else if (user) user.send(`Disabled ${cmdHandler.getCmdPrefix()}${cmd}`);
-      } else {
+        let disabled: string[] = [];
+        msgHandler
+          .getCommandHandler()
+          .getCommands()
+          .forEach((cmd) => {
+            if (!cmd.isEnabled()) {
+              disabled.push(cmd.getName());
+            }
+          });
+
+        fs.writeFile(
+          path.join(__dirname, '../../../disabledcommands.json'),
+          JSON.stringify(disabled),
+          function (err) {
+            if (err) {
+              console.log(err);
+            }
+          }
+        );
         if (chan)
           chan.send(
-            `Error: Cannot disable ${cmdHandler.getCmdPrefix()}${cmd}\n Either it is already disabled or unable to be disabled.`
+            `Disabled ${msgHandler.getCommandHandler().getCmdPrefix()}${cmd}`
           );
         else if (user)
           user.send(
-            `Error: Cannot disable ${cmdHandler.getCmdPrefix()}${cmd}\n Either it is already disabled or unable to be disabled.`
+            `Disabled ${msgHandler.getCommandHandler().getCmdPrefix()}${cmd}`
+          );
+      } else {
+        if (chan)
+          chan.send(
+            `Error: Cannot disable ${msgHandler
+              .getCommandHandler()
+              .getCmdPrefix()}${cmd}\n Either it is already disabled or unable to be disabled.`
+          );
+        else if (user)
+          user.send(
+            `Error: Cannot disable ${msgHandler
+              .getCommandHandler()
+              .getCmdPrefix()}${cmd}\n Either it is already disabled or unable to be disabled.`
           );
       }
     } else {
       if (chan)
         chan.send(
-          `Error: ${cmdHandler.getCmdPrefix()}${cmd} is not a registered command.`
+          `Error: ${msgHandler
+            .getCommandHandler()
+            .getCmdPrefix()}${cmd} is not a registered command.`
         );
       else if (user)
         user.send(
-          `Error: ${cmdHandler.getCmdPrefix()}${cmd} is not a registered command.`
+          `Error: ${msgHandler
+            .getCommandHandler()
+            .getCmdPrefix()}${cmd} is not a registered command.`
         );
     }
   }

@@ -60,7 +60,7 @@ export default class CommandHandler {
           }
         });
       }
-      if (((process.env.DEBUG as unknown) as number) === 1)
+      if (Number(process.env.DEBUG) === 1)
         console.log(`${Date()} registered new command ${command}`);
     } catch (e) {
       console.log(`${Date()} ERROR: ${e}`);
@@ -73,5 +73,10 @@ export default class CommandHandler {
 
   public getCommands(): Map<string, Command> {
     return this.commands;
+  }
+
+  public getCommand(name: string): Command | undefined {
+    if (!this.commands.has(name)) return undefined;
+    return this.commands.get(name);
   }
 }

@@ -30,6 +30,10 @@ export default class MessageHandler {
     this.commandHandler = commandHandler;
   }
 
+  public getCommandHandler(): CommandHandler {
+    return this.commandHandler;
+  }
+
   public handleMessage(msgObj: {
     channel: string;
     author: string;
@@ -38,10 +42,8 @@ export default class MessageHandler {
     let m = msgObj.content.split(' ');
     if (m.length > 0) {
       if (this.commandHandler) {
-        if (this.commandHandler.getCommands().has(m[0].toLowerCase())) {
-          const command = this.commandHandler
-            .getCommands()
-            .get(m[0].toLowerCase()) as Command;
+        const command = this.commandHandler.getCommand(m[0].toLowerCase());
+        if (command) {
           if (command.isEnabled()) {
             command.execute(msgObj);
           }
