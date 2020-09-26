@@ -26,6 +26,8 @@ import DiscordHandler from './internal/DiscordHandler';
 import MessageObject from './interface/MessageObject';
 import { ping } from './command/default/ping';
 import { stop } from './command/admin/stop';
+import { disablecommand } from './command/admin/disablecommand';
+import { enablecommand } from './command/admin/enablecommand';
 
 export default class Commands extends CommandRegistry {
   constructor(discord: DiscordHandler, cmdHandler: CommandHandler) {
@@ -42,5 +44,35 @@ export default class Commands extends CommandRegistry {
         console.log(`${Date()} author: ${messageObj.author} command: stop`);
       return stop(this.getDiscord(), messageObj);
     });
+    this.registerCommand(
+      'enablecommand',
+      ['encom'],
+      async (messageObj: MessageObject) => {
+        if (((process.env.DEBUG as unknown) as number) === 1)
+          console.log(
+            `${Date()} author: ${messageObj.author} command: enablecommand`
+          );
+        return enablecommand(
+          this.getDiscord(),
+          this.getCommandHandler(),
+          messageObj
+        );
+      }
+    );
+    this.registerCommand(
+      'disablecommand',
+      ['discom'],
+      async (messageObj: MessageObject) => {
+        if (((process.env.DEBUG as unknown) as number) === 1)
+          console.log(
+            `${Date()} author: ${messageObj.author} command: disablecommand`
+          );
+        return disablecommand(
+          this.getDiscord(),
+          this.getCommandHandler(),
+          messageObj
+        );
+      }
+    );
   }
 }
