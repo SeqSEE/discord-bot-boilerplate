@@ -74,7 +74,7 @@ export async function disablecommand(
         });
 
         fs.writeFile(
-          path.join(__dirname, '../../../disabledcommands.json'),
+          path.join(__dirname, '../../../data/disabledcommands.json'),
           JSON.stringify(disabled),
           function (err) {
             if (err) {

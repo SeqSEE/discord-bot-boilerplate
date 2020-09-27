@@ -25,8 +25,8 @@ import dotenv from 'dotenv';
 
 const defaultConfig = './default.env';
 const config = './.env';
-const disabledCommandsFile = './disabledcommands.json';
-const adminsFile = './admins.json';
+const disabledCommandsFile = './data/disabledcommands.json';
+const adminsFile = './data/admins.json';
 
 export default async function init(
   start: (disabled: string[], admins: string[]) => void
