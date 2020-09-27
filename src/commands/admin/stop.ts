@@ -38,8 +38,8 @@ export async function stop(
     return;
   }
 
-  if (chan) chan.send('Goodbye');
-  else if (user) user.send('Goodbye');
+  if (chan) await chan.send('Goodbye');
+  else if (user) await user.send('Goodbye');
   discord.getClient().destroy();
   process.exit(0);
 }

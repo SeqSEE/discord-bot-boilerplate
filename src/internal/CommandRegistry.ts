@@ -42,33 +42,34 @@ export default abstract class CommandRegistry {
   public abstract async registerCommands(): Promise<void>;
 
   public enableCommand(name: string): void {
-    if (this.getCommandHandler().getCommands().has(name)) {
-      (this.getCommandHandler().getCommands().get(name) as Command).setEnabled(
-        true
-      );
+    if (this.getCommandHandler().getCommandsMap().has(name)) {
+      (this.getCommandHandler()
+        .getCommandsMap()
+        .get(name) as Command).setEnabled(true);
     }
   }
 
   public disableCommand(name: string): void {
-    if (this.getCommandHandler().getCommands().has(name)) {
-      (this.getCommandHandler().getCommands().get(name) as Command).setEnabled(
-        false
-      );
+    if (this.getCommandHandler().getCommandsMap().has(name)) {
+      (this.getCommandHandler()
+        .getCommandsMap()
+        .get(name) as Command).setEnabled(false);
     }
   }
 
   public getCommand(name: string): Command | undefined {
-    if (this.getCommandHandler().getCommands().has(name))
-      return this.getCommandHandler().getCommands().get(name);
+    if (this.getCommandHandler().getCommandsMap().has(name))
+      return this.getCommandHandler().getCommandsMap().get(name);
     return undefined;
   }
 
   public registerCommand(
     command: string,
+    usage: string,
     aliases: string[],
     handler: (messageObj: MessageObject) => void
   ): void {
-    this.getCommandHandler().registerCommand(command, aliases, handler);
+    this.getCommandHandler().registerCommand(command, usage, aliases, handler);
   }
 
   public getCommandHandler(): CommandHandler {

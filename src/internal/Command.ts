@@ -24,23 +24,30 @@ import MessageObject from '../interface/MessageObject';
 
 export default class Command {
   private command: string;
+  private usage: string;
   private aliases: string[];
   private enabled: boolean;
   private handler: (messageObj: MessageObject) => void;
 
   constructor(
     command: string,
+    usage: string,
     aliases: string[],
     handler: (messageObj: MessageObject) => void
   ) {
     this.enabled = true;
     this.command = command;
+    this.usage = usage;
     this.aliases = aliases;
     this.handler = handler;
   }
 
   public getName(): string {
     return this.command;
+  }
+
+  public getUsage(): string {
+    return this.usage;
   }
 
   public getAliases(): string[] {

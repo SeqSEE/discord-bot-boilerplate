@@ -26,11 +26,11 @@ import { TextChannel } from 'discord.js';
 import fs from 'fs';
 import path from 'path';
 import Command from '../../internal/Command';
-import MessageHandler from '../../internal/MessageHandler';
+import CommandHandler from '../../internal/CommandHandler';
 
 export async function disablecommand(
   discord: DiscordHandler,
-  msgHandler: MessageHandler,
+  cmdHandler: CommandHandler,
   messageObj: MessageObject
 ): Promise<void> {
   let user = await discord.getClient().users.fetch(messageObj.author);
@@ -46,39 +46,32 @@ export async function disablecommand(
   if (m.length < 2) {
     if (chan)
       chan.send(
-        `Error: Invalid arguments\nUsage:\n${msgHandler
-          .getCommandHandler()
-          .getCmdPrefix()}disablecommand <command>`
+        `Error: Invalid arguments\nUsage:\n${cmdHandler.getCmdPrefix()}disablecommand <command>`
       );
     else if (user)
       user.send(
-        `Error: Invalid arguments\nUsage:\n${msgHandler.getCommandHandler()}disablecommand <command>`
+        `Error: Invalid arguments\nUsage:\n${cmdHandler}disablecommand <command>`
       );
   } else {
-    const cmd = m[1];
-    const command:
-      | Command
-      | undefined = msgHandler
-      .getCommandHandler()
-      .getCommands()
-      .get(`${msgHandler.getCommandHandler().getCmdPrefix()}${cmd}`);
-    if (command) {
+    const command = m[1];
+    const cmd: Command | undefined = cmdHandler
+      .getCommandsMap()
+      .get(`${cmdHandler.getCmdPrefix()}${command}`);
+    if (cmd) {
       if (
-        command.getName() != 'disablecommand' &&
-        command.getName() != 'enablecommand' &&
-        command.getName() != 'stop' &&
-        command.isEnabled()
+        cmd.getName() != 'disablecommand' &&
+        cmd.getName() != 'enablecommand' &&
+        cmd.getName() != 'stop' &&
+        cmd.getName() != 'help' &&
+        cmd.isEnabled()
       ) {
-        command.setEnabled(false);
+        cmd.setEnabled(false);
         let disabled: string[] = [];
-        msgHandler
-          .getCommandHandler()
-          .getCommands()
-          .forEach((cmd) => {
-            if (!cmd.isEnabled()) {
-              disabled.push(cmd.getName());
-            }
-          });
+        cmdHandler.getCommandsMap().forEach((c) => {
+          if (!c.isEnabled()) {
+            disabled.push(c.getName());
+          }
+        });
 
         fs.writeFile(
           path.join(__dirname, '../../../disabledcommands.json'),
@@ -89,40 +82,27 @@ export async function disablecommand(
             }
           }
         );
-        if (chan)
-          chan.send(
-            `Disabled ${msgHandler.getCommandHandler().getCmdPrefix()}${cmd}`
-          );
+        if (chan) chan.send(`Disabled ${cmdHandler.getCmdPrefix()}${command}`);
         else if (user)
-          user.send(
-            `Disabled ${msgHandler.getCommandHandler().getCmdPrefix()}${cmd}`
-          );
+          user.send(`Disabled ${cmdHandler.getCmdPrefix()}${command}`);
       } else {
         if (chan)
           chan.send(
-            `Error: Cannot disable ${msgHandler
-              .getCommandHandler()
-              .getCmdPrefix()}${cmd}\n Either it is already disabled or unable to be disabled.`
+            `Error: Cannot disable ${cmdHandler.getCmdPrefix()}${command}\nEither it is already disabled or unable to be disabled.`
           );
         else if (user)
           user.send(
-            `Error: Cannot disable ${msgHandler
-              .getCommandHandler()
-              .getCmdPrefix()}${cmd}\n Either it is already disabled or unable to be disabled.`
+            `Error: Cannot disable ${cmdHandler.getCmdPrefix()}${command}\nEither it is already disabled or unable to be disabled.`
           );
       }
     } else {
       if (chan)
         chan.send(
-          `Error: ${msgHandler
-            .getCommandHandler()
-            .getCmdPrefix()}${cmd} is not a registered command.`
+          `Error: ${cmdHandler.getCmdPrefix()}${command} is not a registered command.`
         );
       else if (user)
         user.send(
-          `Error: ${msgHandler
-            .getCommandHandler()
-            .getCmdPrefix()}${cmd} is not a registered command.`
+          `Error: ${cmdHandler.getCmdPrefix()}${command} is not a registered command.`
         );
     }
   }

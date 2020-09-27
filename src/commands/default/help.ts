@@ -24,11 +24,9 @@ import DiscordHandler from '../../internal/DiscordHandler';
 import MessageObject from '../../interface/MessageObject';
 import { TextChannel } from 'discord.js';
 import CommandHandler from '../../internal/CommandHandler';
-import fs from 'fs';
-import path from 'path';
 import Command from '../../internal/Command';
 
-export async function enablecommand(
+export async function help(
   discord: DiscordHandler,
   cmdHandler: CommandHandler,
   messageObj: MessageObject
@@ -37,64 +35,28 @@ export async function enablecommand(
   let c = await discord.getClient().channels.fetch(messageObj.channel);
   let chan: TextChannel | null =
     c instanceof TextChannel ? (c as TextChannel) : null;
-  if (messageObj.author !== process.env.SUPER_ADMIN) {
-    if (chan) chan.send('Error: Permission Denied');
-    else if (user) user.send('Error: Permission Denied');
-    return;
-  }
   let m = messageObj.content.split(/\s+/);
+  let commands = cmdHandler.getCommands();
+  let helptext = '**Help**\n';
   if (m.length < 2) {
-    if (chan)
-      chan.send(
-        `Error: Invalid arguments\nUsage:\n${cmdHandler.getCmdPrefix()}enablecommand <command>`
-      );
-    else if (user)
-      user.send(
-        `Error: Invalid arguments\nUsage:\n${cmdHandler.getCmdPrefix()}enablecommand <command>`
-      );
+    commands.forEach((command: string) => {
+      let cmd = cmdHandler.getCommand(command);
+      if (cmd) {
+        helptext += `**${cmd.getName()}**  -  ${cmd.getUsage()}\n`;
+      }
+    });
+    if (chan) chan.send(helptext);
+    else if (user) user.send(helptext);
   } else {
     const command = m[1];
-    const cmd: Command | undefined = cmdHandler
-      .getCommandsMap()
-      .get(`${cmdHandler.getCmdPrefix()}${command}`);
+    const cmd: Command | undefined = cmdHandler.getCommand(
+      `${cmdHandler.getCmdPrefix()}${command}`
+    );
     if (cmd) {
-      if (
-        cmd.getName() != 'disablecommand' &&
-        cmd.getName() != 'enablecommand' &&
-        cmd.getName() != 'stop' &&
-        cmd.getName() != 'help' &&
-        !cmd.isEnabled()
-      ) {
-        cmd.setEnabled(true);
-        let disabled: string[] = [];
-        cmdHandler.getCommandsMap().forEach((c) => {
-          if (!c.isEnabled()) {
-            disabled.push(c.getName());
-          }
-        });
-
-        fs.writeFile(
-          path.join(__dirname, '../../../disabledcommands.json'),
-          JSON.stringify(disabled),
-          function (err) {
-            if (err) {
-              console.log(err);
-            }
-          }
-        );
-        if (chan) chan.send(`Enabled ${cmdHandler.getCmdPrefix()}${command}`);
-        else if (user)
-          user.send(`Enabled ${cmdHandler.getCmdPrefix()}${command}`);
-      } else {
-        if (chan)
-          chan.send(
-            `Error: Cannot enable ${cmdHandler.getCmdPrefix()}${command}\nEither it is already enabled or unable to be enabled.`
-          );
-        else if (user)
-          user.send(
-            `Error: Cannot enable ${cmdHandler.getCmdPrefix()}${command}\nEither it is already enabled or unable to be enabled.`
-          );
-      }
+      if (chan)
+        chan.send(`Usage:\n${cmdHandler.getCmdPrefix()}${cmd.getUsage()}`);
+      else if (user)
+        user.send(`Usage:\n${cmdHandler.getCmdPrefix()}${cmd.getUsage()}`);
     } else {
       if (chan)
         chan.send(

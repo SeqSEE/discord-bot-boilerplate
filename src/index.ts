@@ -39,7 +39,7 @@ let start = async (disabled: any) => {
   const commands = new Commands(discord, cmdHandler, msgHandler);
   await commands.registerCommands();
   Object.values(disabled).forEach((d) => {
-    let cmd = cmdHandler.getCommands().get(d as string);
+    let cmd = cmdHandler.getCommandsMap().get(d as string);
     if (cmd) {
       cmd.setEnabled(false);
       if (((process.env.DEBUG as unknown) as number) === 1)

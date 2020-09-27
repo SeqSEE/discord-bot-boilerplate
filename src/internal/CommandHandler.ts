@@ -24,35 +24,40 @@ import MessageObject from '../interface/MessageObject';
 import Command from './Command';
 
 export default class CommandHandler {
-  private commands: Map<string, Command>;
+  private commands: string[];
+  private commandsMap: Map<string, Command>;
   private cmdPrefix: string;
 
   constructor(cmdPrefix: string) {
     this.cmdPrefix = cmdPrefix;
-    this.commands = new Map<string, Command>();
+    this.commands = [];
+    this.commandsMap = new Map<string, Command>();
   }
 
   public registerCommand(
     command: string,
+    usage: string,
     aliases: string[],
     handler: (messageObj: MessageObject) => void
   ) {
     try {
-      if (this.commands.has(`${this.cmdPrefix}${command}`)) {
+      if (this.commandsMap.has(`${this.cmdPrefix}${command}`)) {
         throw new Error(`${command} is already registered as a command`);
       } else {
-        this.commands.set(
+        this.commandsMap.set(
           `${this.cmdPrefix}${command}`,
-          new Command(`${this.cmdPrefix}${command}`, aliases, handler)
+          new Command(`${this.cmdPrefix}${command}`, usage, aliases, handler)
         );
+        this.commands.push(`${this.cmdPrefix}${command}`);
         aliases.forEach((alias: string) => {
-          if (this.commands.has(`${this.cmdPrefix}${alias}`)) {
+          if (this.commandsMap.has(`${this.cmdPrefix}${alias}`)) {
             throw new Error(`${alias} is already registered as a command`);
           } else {
-            this.commands.set(
+            this.commandsMap.set(
               `${this.cmdPrefix}${alias}`,
               new Command(
                 `${this.cmdPrefix}${alias}`,
+                usage,
                 aliases.filter((e) => e !== `${this.cmdPrefix}${alias}`),
                 handler
               )
@@ -71,12 +76,16 @@ export default class CommandHandler {
     return this.cmdPrefix;
   }
 
-  public getCommands(): Map<string, Command> {
+  public getCommands(): string[] {
     return this.commands;
   }
 
+  public getCommandsMap(): Map<string, Command> {
+    return this.commandsMap;
+  }
+
   public getCommand(name: string): Command | undefined {
-    if (!this.commands.has(name)) return undefined;
-    return this.commands.get(name);
+    if (!this.commandsMap.has(name)) return undefined;
+    return this.commandsMap.get(name);
   }
 }
