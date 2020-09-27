@@ -62,10 +62,7 @@ export async function disablecommand(
       .get(`${cmdHandler.getCmdPrefix()}${command}`);
     if (cmd) {
       if (
-        cmd.getName() != `${cmdHandler.getCmdPrefix()}disablecommand` &&
-        cmd.getName() != `${cmdHandler.getCmdPrefix()}enablecommand` &&
-        cmd.getName() != `${cmdHandler.getCmdPrefix()}stop` &&
-        cmd.getName() != `${cmdHandler.getCmdPrefix()}help` &&
+        cmdHandler.protectedCommands.indexOf(cmd.getName()) === -1 &&
         cmd.isEnabled()
       ) {
         cmd.setEnabled(false);

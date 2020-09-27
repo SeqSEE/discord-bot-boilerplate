@@ -30,10 +30,18 @@ export default class CommandHandler {
   private admins: string[];
   private commands: string[];
   private commandsMap: Map<string, Command>;
-
+  public protectedCommands: string[];
   constructor(cmdPrefix: string, admins: string[]) {
     this.cmdPrefix = cmdPrefix;
     this.admins = admins;
+    this.protectedCommands = [
+      `${cmdPrefix}stop`,
+      `${cmdPrefix}removeadmin`,
+      `${cmdPrefix}addadmin`,
+      `${cmdPrefix}help`,
+      `${cmdPrefix}disablecommand`,
+      `${cmdPrefix}enablecommand`,
+    ];
     this.commands = [];
     this.commandsMap = new Map<string, Command>();
   }
