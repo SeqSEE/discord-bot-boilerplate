@@ -42,9 +42,8 @@ export async function help(
     commands.forEach((command: string) => {
       let cmd = cmdHandler.getCommand(command);
       if (cmd) {
-        helptext += `${
-          !cmd.isEnabled() ? '(DISABLED) ' : ''
-        }**${cmd.getName()}**  -  ${cmd.getUsage()}\n`;
+        if (cmd.isEnabled())
+          helptext += `**${cmd.getName()}**  -  ${cmd.getUsage()}\n`;
       }
     });
     if (chan) chan.send(helptext);
