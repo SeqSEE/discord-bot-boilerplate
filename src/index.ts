@@ -28,12 +28,13 @@ import CommandHandler from './internal/CommandHandler';
 import MessageHandler from './internal/MessageHandler';
 import Commands from './Commands';
 
-let start = async (disabled: any) => {
+let start = async (disabled: string[], admins: string[]) => {
   const envConf = dotenv.config();
   const client: Client = new Client();
   const discord: DiscordHandler = new DiscordHandler(client);
   const cmdHandler: CommandHandler = new CommandHandler(
-    <string>process.env.CMD_PREFIX
+    <string>process.env.CMD_PREFIX,
+    admins
   );
   const msgHandler: MessageHandler = new MessageHandler(cmdHandler);
   const commands = new Commands(discord, cmdHandler, msgHandler);

@@ -20,16 +20,20 @@
  THE SOFTWARE.
  */
 
+import fs from 'fs';
+import path from 'path';
 import MessageObject from '../interface/MessageObject';
 import Command from './Command';
 
 export default class CommandHandler {
+  private cmdPrefix: string;
+  private admins: string[];
   private commands: string[];
   private commandsMap: Map<string, Command>;
-  private cmdPrefix: string;
 
-  constructor(cmdPrefix: string) {
+  constructor(cmdPrefix: string, admins: string[]) {
     this.cmdPrefix = cmdPrefix;
+    this.admins = admins;
     this.commands = [];
     this.commandsMap = new Map<string, Command>();
   }
@@ -87,5 +91,39 @@ export default class CommandHandler {
   public getCommand(name: string): Command | undefined {
     if (!this.commandsMap.has(name)) return undefined;
     return this.commandsMap.get(name);
+  }
+
+  public isAdmin(id: string): boolean {
+    if (this.admins.indexOf(id) > -1) return true;
+    return false;
+  }
+
+  public addAdmin(id: string) {
+    if (this.admins.indexOf(id) === -1) this.admins.push(id);
+    this.saveAdmins();
+  }
+
+  public removeAdmin(id: string) {
+    const i = this.admins.indexOf(id);
+    if (i > -1) {
+      this.admins.splice(i, 1);
+    }
+    this.saveAdmins();
+  }
+
+  public getAdmins(): string[] {
+    return this.admins;
+  }
+
+  private saveAdmins(): void {
+    fs.writeFile(
+      path.join(__dirname, '../../admins.json'),
+      JSON.stringify(this.admins),
+      function (err) {
+        if (err) {
+          console.log(err);
+        }
+      }
+    );
   }
 }

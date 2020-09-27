@@ -37,7 +37,10 @@ export async function disablecommand(
   let c = await discord.getClient().channels.fetch(messageObj.channel);
   let chan: TextChannel | null =
     c instanceof TextChannel ? (c as TextChannel) : null;
-  if (messageObj.author !== process.env.SUPER_ADMIN) {
+  if (
+    messageObj.author !== process.env.SUPER_ADMIN &&
+    !cmdHandler.isAdmin(messageObj.author)
+  ) {
     if (chan) chan.send('Error: Permission Denied');
     else if (user) user.send('Error: Permission Denied');
     return;

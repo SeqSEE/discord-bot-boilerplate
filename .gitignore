@@ -2,3 +2,4 @@ node_modules
 dist
 .env
 disabledcommands.json
+admins.json

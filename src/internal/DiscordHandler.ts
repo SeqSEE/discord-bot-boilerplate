@@ -20,7 +20,7 @@
  THE SOFTWARE.
  */
 
-import { Client } from 'discord.js';
+import { Client, User } from 'discord.js';
 import DiscordUtil from '../util/DiscordUtil';
 
 export default class DiscordHandler {

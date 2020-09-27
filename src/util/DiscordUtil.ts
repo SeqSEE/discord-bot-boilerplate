@@ -32,7 +32,7 @@ import {
 
 export default class DiscordUtil {
   private client: Client;
-
+  public regexMention: RegExp = /^<@!?(\d+)>$/;
   constructor(client: Client) {
     this.client = client;
   }
@@ -126,5 +126,15 @@ export default class DiscordUtil {
     }
 
     return out;
+  }
+
+  public async parseUser(input: string): Promise<User | undefined> {
+    let search: string = input;
+    let user: User | undefined = undefined;
+    if (input.startsWith('<@') && input.endsWith('>')) {
+      search = input.slice(2, input.length - 1);
+    }
+    if (!search.startsWith('!')) user = await this.client.users.fetch(search);
+    return user;
   }
 }

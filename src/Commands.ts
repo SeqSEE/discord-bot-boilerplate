@@ -25,11 +25,14 @@ import CommandHandler from './internal/CommandHandler';
 import DiscordHandler from './internal/DiscordHandler';
 import MessageObject from './interface/MessageObject';
 import { ping } from './commands/default/ping';
-import { stop } from './commands/admin/stop';
+import { stop } from './commands/operator/stop';
 import { disablecommand } from './commands/admin/disablecommand';
 import { enablecommand } from './commands/admin/enablecommand';
 import MessageHandler from './internal/MessageHandler';
 import { help } from './commands/default/help';
+import { addadmin } from './commands/operator/addadmin';
+import { removeadmin } from './commands/operator/removeadmin';
+import { admins } from './commands/operator/admins';
 
 export default class Commands extends CommandRegistry {
   constructor(
@@ -96,6 +99,48 @@ export default class Commands extends CommandRegistry {
             `${Date()} author: ${messageObj.author} command: disablecommand`
           );
         return disablecommand(
+          this.getDiscord(),
+          this.getCommandHandler(),
+          messageObj
+        );
+      }
+    );
+    this.registerCommand(
+      'admins',
+      'admins',
+      [],
+      async (messageObj: MessageObject) => {
+        if (Number(process.env.DEBUG) === 1)
+          console.log(`${Date()} author: ${messageObj.author} command: admins`);
+        return admins(this.getDiscord(), this.getCommandHandler(), messageObj);
+      }
+    );
+    this.registerCommand(
+      'addadmin',
+      'addadmin <user>',
+      [],
+      async (messageObj: MessageObject) => {
+        if (Number(process.env.DEBUG) === 1)
+          console.log(
+            `${Date()} author: ${messageObj.author} command: addadmin`
+          );
+        return addadmin(
+          this.getDiscord(),
+          this.getCommandHandler(),
+          messageObj
+        );
+      }
+    );
+    this.registerCommand(
+      'removeadmin',
+      'removeadmin <user>',
+      ['remadmin', 'deladmin', 'deleteadmin'],
+      async (messageObj: MessageObject) => {
+        if (Number(process.env.DEBUG) === 1)
+          console.log(
+            `${Date()} author: ${messageObj.author} command: removeadmin`
+          );
+        return removeadmin(
           this.getDiscord(),
           this.getCommandHandler(),
           messageObj
