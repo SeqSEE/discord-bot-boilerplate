@@ -24,7 +24,6 @@ import DiscordHandler from '../../internal/DiscordHandler';
 import MessageObject from '../../interface/MessageObject';
 import { TextChannel, User } from 'discord.js';
 import CommandHandler from '../../internal/CommandHandler';
-import { exists } from 'fs';
 
 export async function addadmin(
   discord: DiscordHandler,

@@ -125,7 +125,7 @@ export default class CommandHandler {
 
   private saveAdmins(): void {
     fs.writeFile(
-      path.join(__dirname, '../../admins.json'),
+      path.join(__dirname, '../../data/admins.json'),
       JSON.stringify(this.admins),
       function (err) {
         if (err) {
