@@ -59,10 +59,10 @@ export async function enablecommand(
       .get(`${cmdHandler.getCmdPrefix()}${command}`);
     if (cmd) {
       if (
-        cmd.getName() != 'disablecommand' &&
-        cmd.getName() != 'enablecommand' &&
-        cmd.getName() != 'stop' &&
-        cmd.getName() != 'help' &&
+        cmd.getName() != `${cmdHandler.getCmdPrefix()}disablecommand` &&
+        cmd.getName() != `${cmdHandler.getCmdPrefix()}enablecommand` &&
+        cmd.getName() != `${cmdHandler.getCmdPrefix()}stop` &&
+        cmd.getName() != `${cmdHandler.getCmdPrefix()}help` &&
         !cmd.isEnabled()
       ) {
         cmd.setEnabled(true);
