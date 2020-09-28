@@ -40,9 +40,13 @@ export default class MessageHandler {
     content: string;
   }) {
     let m = msgObj.content.split(' ');
-    if (m.length > 0) {
+    if (m.length > this.commandHandler.getCmdPrefix().length - 1) {
       if (this.commandHandler) {
-        const command = this.commandHandler.getCommand(m[0].toLowerCase());
+        const command = this.commandHandler.getCommand(
+          m[0]
+            .toLowerCase()
+            .substring(this.commandHandler.getCmdPrefix().length)
+        );
         if (command) {
           if (command.isEnabled()) {
             command.execute(msgObj);

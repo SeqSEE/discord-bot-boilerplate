@@ -20,26 +20,53 @@
  THE SOFTWARE.
  */
 
-import DiscordHandler from '../../internal/DiscordHandler';
-import MessageObject from '../../interface/MessageObject';
+import DiscordHandler from '../../DiscordHandler';
+import MessageObject from '../../../interface/MessageObject';
 import { TextChannel } from 'discord.js';
+import CommandHandler from '../../CommandHandler';
+import Command from '../../Command';
 
-export async function stop(
+export async function help(
   discord: DiscordHandler,
+  cmdHandler: CommandHandler,
   messageObj: MessageObject
 ): Promise<void> {
   let user = await discord.getClient().users.fetch(messageObj.author);
   let c = await discord.getClient().channels.fetch(messageObj.channel);
   let chan: TextChannel | null =
     c instanceof TextChannel ? (c as TextChannel) : null;
-  if (messageObj.author !== process.env.SUPER_ADMIN) {
-    if (chan) chan.send('Error: Permission Denied');
-    else if (user) user.send('Error: Permission Denied');
-    return;
+  let m = messageObj.content.split(/\s+/);
+  let commands = cmdHandler.getCommands();
+  let helptext = '**Help**\n';
+  if (m.length < 2) {
+    commands.forEach((command: string) => {
+      let cmd = cmdHandler.getCommand(command);
+      if (cmd) {
+        if (cmd.isEnabled())
+          helptext += `**${cmd.getName()}**  -  ${cmd.getUsage()}\n`;
+      }
+    });
+    if (chan) chan.send(helptext);
+    else if (user) user.send(helptext);
+  } else {
+    const command = m[1];
+    const cmd: Command | undefined = cmdHandler.getCommand(
+      `${cmdHandler.getCmdPrefix()}${command}`
+    );
+    if (cmd) {
+      if (chan)
+        chan.send(`Usage:\n${cmdHandler.getCmdPrefix()}${cmd.getUsage()}`);
+      else if (user)
+        user.send(`Usage:\n${cmdHandler.getCmdPrefix()}${cmd.getUsage()}`);
+    } else {
+      if (chan)
+        chan.send(
+          `Error: ${cmdHandler.getCmdPrefix()}${command} is not a registered command.`
+        );
+      else if (user)
+        user.send(
+          `Error: ${cmdHandler.getCmdPrefix()}${command} is not a registered command.`
+        );
+    }
   }
-
-  if (chan) await chan.send('Goodbye');
-  else if (user) await user.send('Goodbye');
-  discord.getClient().destroy();
-  process.exit(0);
 }

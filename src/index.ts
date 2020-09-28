@@ -40,11 +40,11 @@ let start = async (disabled: string[], admins: string[]) => {
   const commands = new Commands(discord, cmdHandler, msgHandler);
   await commands.registerCommands();
   Object.values(disabled).forEach((d) => {
-    let cmd = cmdHandler.getCommandsMap().get(d as string);
+    let cmd = cmdHandler.getCommandsMap().get(`${d as string}`);
     if (cmd) {
       cmd.setEnabled(false);
-      if (((process.env.DEBUG as unknown) as number) === 1)
-        console.log(`Disabled ${cmd}`);
+      if (Number(process.env.DEBUG as unknown) === 1)
+        console.log(`Disabled ${cmd.getName}`);
     }
   });
   client.on('ready', async () => {

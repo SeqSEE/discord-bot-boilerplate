@@ -20,13 +20,13 @@
  THE SOFTWARE.
  */
 
-import DiscordHandler from '../../internal/DiscordHandler';
-import MessageObject from '../../interface/MessageObject';
+import DiscordHandler from '../../DiscordHandler';
+import MessageObject from '../../../interface/MessageObject';
 import { TextChannel } from 'discord.js';
 import fs from 'fs';
 import path from 'path';
-import Command from '../../internal/Command';
-import CommandHandler from '../../internal/CommandHandler';
+import Command from '../../Command';
+import CommandHandler from '../../CommandHandler';
 
 export async function disablecommand(
   discord: DiscordHandler,
@@ -59,29 +59,13 @@ export async function disablecommand(
     const command = m[1];
     const cmd: Command | undefined = cmdHandler
       .getCommandsMap()
-      .get(`${cmdHandler.getCmdPrefix()}${command}`);
+      .get(`${command}`);
     if (cmd) {
       if (
         cmdHandler.protectedCommands.indexOf(cmd.getName()) === -1 &&
         cmd.isEnabled()
       ) {
-        cmd.setEnabled(false);
-        let disabled: string[] = [];
-        cmdHandler.getCommandsMap().forEach((c) => {
-          if (!c.isEnabled()) {
-            disabled.push(c.getName());
-          }
-        });
-
-        fs.writeFile(
-          path.join(__dirname, '../../../data/disabledcommands.json'),
-          JSON.stringify(disabled),
-          function (err) {
-            if (err) {
-              console.log(err);
-            }
-          }
-        );
+        cmdHandler.setCommandEnabled(cmd, false);
         if (chan) chan.send(`Disabled ${cmdHandler.getCmdPrefix()}${command}`);
         else if (user)
           user.send(`Disabled ${cmdHandler.getCmdPrefix()}${command}`);

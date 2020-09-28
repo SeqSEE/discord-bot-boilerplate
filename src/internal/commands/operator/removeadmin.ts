@@ -20,10 +20,10 @@
  THE SOFTWARE.
  */
 
-import DiscordHandler from '../../internal/DiscordHandler';
-import MessageObject from '../../interface/MessageObject';
+import DiscordHandler from '../../DiscordHandler';
+import MessageObject from '../../../interface/MessageObject';
 import { TextChannel, User } from 'discord.js';
-import CommandHandler from '../../internal/CommandHandler';
+import CommandHandler from '../../CommandHandler';
 
 export async function removeadmin(
   discord: DiscordHandler,

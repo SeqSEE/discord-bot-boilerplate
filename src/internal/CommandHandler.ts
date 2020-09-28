@@ -35,12 +35,12 @@ export default class CommandHandler {
     this.cmdPrefix = cmdPrefix;
     this.admins = admins;
     this.protectedCommands = [
-      `${cmdPrefix}stop`,
-      `${cmdPrefix}removeadmin`,
-      `${cmdPrefix}addadmin`,
-      `${cmdPrefix}help`,
-      `${cmdPrefix}disablecommand`,
-      `${cmdPrefix}enablecommand`,
+      `stop`,
+      `removeadmin`,
+      `addadmin`,
+      `help`,
+      `disablecommand`,
+      `enablecommand`,
     ];
     this.commands = [];
     this.commandsMap = new Map<string, Command>();
@@ -53,24 +53,24 @@ export default class CommandHandler {
     handler: (messageObj: MessageObject) => void
   ) {
     try {
-      if (this.commandsMap.has(`${this.cmdPrefix}${command}`)) {
+      if (this.commandsMap.has(`${command}`)) {
         throw new Error(`${command} is already registered as a command`);
       } else {
         this.commandsMap.set(
-          `${this.cmdPrefix}${command}`,
-          new Command(`${this.cmdPrefix}${command}`, usage, aliases, handler)
+          `${command}`,
+          new Command(`${command}`, usage, aliases, handler)
         );
-        this.commands.push(`${this.cmdPrefix}${command}`);
+        this.commands.push(`${command}`);
         aliases.forEach((alias: string) => {
-          if (this.commandsMap.has(`${this.cmdPrefix}${alias}`)) {
+          if (this.commandsMap.has(`${alias}`)) {
             throw new Error(`${alias} is already registered as a command`);
           } else {
             this.commandsMap.set(
-              `${this.cmdPrefix}${alias}`,
+              `${alias}`,
               new Command(
-                `${this.cmdPrefix}${alias}`,
+                `${alias}`,
                 usage,
-                aliases.filter((e) => e !== `${this.cmdPrefix}${alias}`),
+                aliases.filter((e) => e !== `${alias}`),
                 handler
               )
             );
@@ -101,17 +101,41 @@ export default class CommandHandler {
     return this.commandsMap.get(name);
   }
 
+  public setCommandEnabled(command: Command, enabled: boolean): void {
+    if (this.protectedCommands.indexOf(command.getName()) > -1) return;
+    command.setEnabled(enabled);
+    this.saveDisabledCommands();
+  }
+
+  private saveDisabledCommands(): void {
+    let disabled: string[] = [];
+    this.getCommandsMap().forEach((c) => {
+      if (!c.isEnabled()) {
+        disabled.push(c.getName().substring(this.getCmdPrefix().length));
+      }
+    });
+    fs.writeFile(
+      path.join(__dirname, '../../data/disabledcommands.json'),
+      JSON.stringify(disabled),
+      function (err) {
+        if (err) {
+          console.log(err);
+        }
+      }
+    );
+  }
+
   public isAdmin(id: string): boolean {
     if (this.admins.indexOf(id) > -1) return true;
     return false;
   }
 
-  public addAdmin(id: string) {
+  public addAdmin(id: string): void {
     if (this.admins.indexOf(id) === -1) this.admins.push(id);
     this.saveAdmins();
   }
 
-  public removeAdmin(id: string) {
+  public removeAdmin(id: string): void {
     const i = this.admins.indexOf(id);
     if (i > -1) {
       this.admins.splice(i, 1);

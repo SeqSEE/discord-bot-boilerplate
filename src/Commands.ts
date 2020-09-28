@@ -20,21 +20,14 @@
  THE SOFTWARE.
  */
 
-import CommandRegistry from './internal/CommandRegistry';
-import CommandHandler from './internal/CommandHandler';
+import InternalCommands from './internal/InternalCommands';
 import DiscordHandler from './internal/DiscordHandler';
-import MessageObject from './interface/MessageObject';
-import { ping } from './commands/default/ping';
-import { stop } from './commands/operator/stop';
-import { disablecommand } from './commands/admin/disablecommand';
-import { enablecommand } from './commands/admin/enablecommand';
+import CommandHandler from './internal/CommandHandler';
 import MessageHandler from './internal/MessageHandler';
-import { help } from './commands/default/help';
-import { addadmin } from './commands/operator/addadmin';
-import { removeadmin } from './commands/operator/removeadmin';
-import { admins } from './commands/operator/admins';
+import MessageObject from './interface/MessageObject';
+import { ping } from './commands/example/ping';
 
-export default class Commands extends CommandRegistry {
+export default class Commands extends InternalCommands {
   constructor(
     discord: DiscordHandler,
     cmdHandler: CommandHandler,
@@ -43,6 +36,7 @@ export default class Commands extends CommandRegistry {
     super(discord, cmdHandler, msgHandler);
   }
   public async registerCommands(): Promise<void> {
+    await super.registerCommands(); //register the internal commands first
     this.registerCommand(
       'ping',
       'ping',
@@ -51,100 +45,6 @@ export default class Commands extends CommandRegistry {
         if (Number(process.env.DEBUG) === 1)
           console.log(`${Date()} author: ${messageObj.author} command: ping`);
         return ping(this.getDiscord(), messageObj);
-      }
-    );
-    this.registerCommand(
-      'stop',
-      'stop',
-      [],
-      async (messageObj: MessageObject) => {
-        if (Number(process.env.DEBUG) === 1)
-          console.log(`${Date()} author: ${messageObj.author} command: stop`);
-        return stop(this.getDiscord(), messageObj);
-      }
-    );
-    this.registerCommand(
-      'help',
-      'help (command)',
-      ['?'],
-      async (messageObj: MessageObject) => {
-        if (Number(process.env.DEBUG) === 1)
-          console.log(`${Date()} author: ${messageObj.author} command: help`);
-        return help(this.getDiscord(), this.getCommandHandler(), messageObj);
-      }
-    );
-    this.registerCommand(
-      'enablecommand',
-      'enablecommand <command>',
-      ['encom'],
-      async (messageObj: MessageObject) => {
-        if (Number(process.env.DEBUG) === 1)
-          console.log(
-            `${Date()} author: ${messageObj.author} command: enablecommand`
-          );
-        return enablecommand(
-          this.getDiscord(),
-          this.getCommandHandler(),
-          messageObj
-        );
-      }
-    );
-    this.registerCommand(
-      'disablecommand',
-      'disablecommand <commmand>',
-      ['discom'],
-      async (messageObj: MessageObject) => {
-        if (Number(process.env.DEBUG) === 1)
-          console.log(
-            `${Date()} author: ${messageObj.author} command: disablecommand`
-          );
-        return disablecommand(
-          this.getDiscord(),
-          this.getCommandHandler(),
-          messageObj
-        );
-      }
-    );
-    this.registerCommand(
-      'admins',
-      'admins',
-      [],
-      async (messageObj: MessageObject) => {
-        if (Number(process.env.DEBUG) === 1)
-          console.log(`${Date()} author: ${messageObj.author} command: admins`);
-        return admins(this.getDiscord(), this.getCommandHandler(), messageObj);
-      }
-    );
-    this.registerCommand(
-      'addadmin',
-      'addadmin <user>',
-      [],
-      async (messageObj: MessageObject) => {
-        if (Number(process.env.DEBUG) === 1)
-          console.log(
-            `${Date()} author: ${messageObj.author} command: addadmin`
-          );
-        return addadmin(
-          this.getDiscord(),
-          this.getCommandHandler(),
-          messageObj
-        );
-      }
-    );
-    this.registerCommand(
-      'removeadmin',
-      'removeadmin <user>',
-      ['remadmin', 'deladmin', 'deleteadmin'],
-      async (messageObj: MessageObject) => {
-        if (Number(process.env.DEBUG) === 1)
-          console.log(
-            `${Date()} author: ${messageObj.author} command: removeadmin`
-          );
-        return removeadmin(
-          this.getDiscord(),
-          this.getCommandHandler(),
-          messageObj
-        );
       }
     );
   }
