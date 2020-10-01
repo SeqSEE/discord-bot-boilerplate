@@ -24,8 +24,6 @@ import DiscordHandler from '../../DiscordHandler';
 import MessageObject from '../../../interface/MessageObject';
 import { TextChannel } from 'discord.js';
 import CommandHandler from '../../CommandHandler';
-import fs from 'fs';
-import path from 'path';
 import Command from '../../Command';
 
 export async function enablecommand(

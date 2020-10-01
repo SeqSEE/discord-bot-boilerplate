@@ -23,8 +23,6 @@
 import DiscordHandler from '../../DiscordHandler';
 import MessageObject from '../../../interface/MessageObject';
 import { TextChannel } from 'discord.js';
-import fs from 'fs';
-import path from 'path';
 import Command from '../../Command';
 import CommandHandler from '../../CommandHandler';
 

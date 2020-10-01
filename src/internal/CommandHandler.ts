@@ -111,12 +111,12 @@ export default class CommandHandler {
     let disabled: string[] = [];
     this.getCommandsMap().forEach((c) => {
       if (!c.isEnabled()) {
-        disabled.push(c.getName().substring(this.getCmdPrefix().length));
+        disabled.push(c.getName());
       }
     });
     fs.writeFile(
       path.join(__dirname, '../../data/disabledcommands.json'),
-      JSON.stringify(disabled),
+      JSON.stringify(disabled, null, 2),
       function (err) {
         if (err) {
           console.log(err);
@@ -150,7 +150,7 @@ export default class CommandHandler {
   private saveAdmins(): void {
     fs.writeFile(
       path.join(__dirname, '../../data/admins.json'),
-      JSON.stringify(this.admins),
+      JSON.stringify(this.admins, null, 2),
       function (err) {
         if (err) {
           console.log(err);
