@@ -9,7 +9,7 @@ A simple TypeScript boilerplate for a Discord bot.
 
 ### Setup
 
-- [Use this repo as a template](https://github.com/SeqSEE/discord-bot-boilerplate/generate
+- [Use this repo as a template](https://github.com/SeqSEE/discord-bot-boilerplate/generate)
 
 ```
 git clone https://github.com/YOURUSERNAME/discord-bot-boilerplate.git
