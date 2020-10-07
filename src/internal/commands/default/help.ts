@@ -37,17 +37,37 @@ export async function help(
     c instanceof TextChannel ? (c as TextChannel) : null;
   let m = messageObj.content.split(/\s+/);
   let commands = cmdHandler.getCommands();
-  let helptext = '**Help**\n';
+  let helpEmbed = {
+    embed: {
+      color: 8359053,
+      author: {
+        name: process.env.BOT_NAME as string,
+        icon_url: process.env.ICON_URL as string,
+      },
+      title: `**HELP**`,
+      url: '',
+      description: `** **`,
+      fields: [
+        cmdHandler.getCommands().map((cmd) => {
+          let command = cmdHandler.getCommand(cmd);
+          if (command && command.isEnabled()) {
+            return command.getHelpSection();
+          }
+        }),
+      ],
+      timestamp: new Date(),
+      image: {
+        url: '',
+      },
+      footer: {
+        iconURL: process.env.ICON_URL as string,
+        text: process.env.BOT_NAME as string,
+      },
+    },
+  };
   if (m.length < 2) {
-    commands.forEach((command: string) => {
-      let cmd = cmdHandler.getCommand(command);
-      if (cmd) {
-        if (cmd.isEnabled())
-          helptext += `**${cmd.getName()}**  -  ${cmd.getUsage()}\n`;
-      }
-    });
-    if (chan) chan.send(helptext);
-    else if (user) user.send(helptext);
+    if (chan) chan.send(helpEmbed);
+    else if (user) user.send(helpEmbed);
   } else {
     const command = m[1];
     const cmd: Command | undefined = cmdHandler.getCommand(
