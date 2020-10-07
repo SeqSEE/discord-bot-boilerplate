@@ -60,6 +60,16 @@ export default async function init(
           console.log(`CMD_PREFIX is undefined`);
           process.exit(1);
         };
+      } else if (process.env.BOT_NAME == undefined) {
+        s = () => {
+          console.log(`BOT_NAME is undefined`);
+          process.exit(1);
+        };
+      } else if (process.env.ICON_URL == undefined) {
+        s = () => {
+          console.log(`ICON_URL is undefined`);
+          process.exit(1);
+        };
       } else {
         s = start;
 
