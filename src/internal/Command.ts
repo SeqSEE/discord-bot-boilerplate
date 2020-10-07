@@ -54,6 +54,14 @@ export default class Command {
     return this.aliases;
   }
 
+  public getHelpSection() {
+    return {
+      name: `${process.env.CMD_PREFIX}${this.getName()}`,
+      value: `${this.getUsage()}`,
+      inline: false,
+    };
+  }
+
   public setEnabled(enabled: boolean): void {
     this.enabled = enabled;
   }
