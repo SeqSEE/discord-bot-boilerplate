@@ -88,7 +88,7 @@ let start = async (disabled: string[], admins: string[]) => {
     });
   });
   try {
-    client.login(process.env.API_KEY);
+    await client.login(process.env.API_KEY);
   } catch (e) {
     console.log(JSON.stringify(e));
     process.exit(1);
