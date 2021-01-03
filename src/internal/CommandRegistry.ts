@@ -39,7 +39,7 @@ export default abstract class CommandRegistry {
     this.cmdHandler = cmdHandler;
     this.msgHandler = msgHandler;
   }
-  public abstract async registerCommands(): Promise<void>;
+  public abstract registerCommands(): Promise<void>;
 
   public enableCommand(name: string): void {
     if (this.getCommandHandler().getCommandsMap().has(name)) {
