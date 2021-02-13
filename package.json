@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "clean": "rm -rf dist && rm -rf disabledcommands.json",
-    "build": "tsc",
+    "build": "tsc --listEmittedFiles -p .",
     "start": "node ./dist/index.js > ./dist/debug.log 2> ./dist/error.log"
   },
   "author": "SeqSEE",

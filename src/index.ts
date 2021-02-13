@@ -39,14 +39,15 @@ let start = async (disabled: string[], admins: string[]) => {
   const msgHandler: MessageHandler = new MessageHandler(cmdHandler);
   const commands = new Commands(discord, cmdHandler, msgHandler);
   await commands.registerCommands();
-  Object.values(disabled).forEach((d) => {
+  for (let d of disabled) {
     let cmd = cmdHandler.getCommandsMap().get(`${d as string}`);
     if (cmd) {
       cmd.setEnabled(false);
       if (Number(process.env.DEBUG as unknown) === 1)
         console.log(`Disabled ${cmd.getName}`);
     }
-  });
+  }
+
   client.on('ready', async () => {
     if (((process.env.DEBUG as unknown) as number) === 1)
       console.log(`Logged in as ${client.user!.tag}!`);
@@ -79,9 +80,9 @@ let start = async (disabled: string[], admins: string[]) => {
         } as PresenceData);
       });
   });
-  client.on('message', (msg: Message) => {
+  client.on('message', async (msg: Message) => {
     if (msg.author.bot) return;
-    msgHandler.handleMessage({
+    await msgHandler.handleMessage({
       channel: msg.channel.id,
       author: msg.author.id,
       content: msg.content,

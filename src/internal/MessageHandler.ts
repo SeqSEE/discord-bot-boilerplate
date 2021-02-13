@@ -21,7 +21,6 @@
  */
 
 import CommandHandler from './CommandHandler';
-import Command from './Command';
 
 export default class MessageHandler {
   private commandHandler: CommandHandler;
@@ -34,7 +33,7 @@ export default class MessageHandler {
     return this.commandHandler;
   }
 
-  public handleMessage(msgObj: {
+  public async handleMessage(msgObj: {
     channel: string;
     author: string;
     content: string;
@@ -49,7 +48,7 @@ export default class MessageHandler {
         );
         if (command) {
           if (command.isEnabled()) {
-            command.execute(msgObj);
+            await command.execute(msgObj);
           }
         }
       }

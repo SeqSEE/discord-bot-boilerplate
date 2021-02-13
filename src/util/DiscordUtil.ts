@@ -62,9 +62,9 @@ export default class DiscordUtil {
     }
     let mess: RegExpMatchArray | null = message.match(re);
     if (mess) {
-      mess.forEach((m) => {
+      for (let m of mess) {
         messages.push(m);
-      });
+      }
     }
     return messages;
   }
@@ -97,12 +97,13 @@ export default class DiscordUtil {
       let messages: Collection<string, Message> = await channel.messages.fetch({
         limit: limit,
       });
-      messages.forEach(
-        (message: Message, key: string, map: Map<string, Message>) => {
+      for (let m of messages.keys()) {
+        const message = messages.get(m);
+        if (message) {
           if (this.client.user!.id != message.author.id)
             out[message.author.id] = true;
         }
-      );
+      }
     } else {
       let rounds = limit / 100 + (limit % 100 ? 1 : 0);
       let last_id: string = '';
@@ -115,13 +116,14 @@ export default class DiscordUtil {
           string,
           Message
         > = await channel.messages.fetch(options);
-        messages.forEach(
-          (message: Message, key: string, map: Map<string, Message>) => {
+        for (let m of messages.keys()) {
+          const message = messages.get(m);
+          if (message) {
             if (this.client.user!.id != message.author.id)
               out[message.author.id] = true;
             last_id = message.id;
           }
-        );
+        }
       }
     }
 
