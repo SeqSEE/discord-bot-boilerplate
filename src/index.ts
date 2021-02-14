@@ -81,7 +81,7 @@ let start = async (disabled: string[], admins: string[]) => {
       });
   });
   client.on('message', async (msg: Message) => {
-    if (msg.author.bot) return;
+    if (msg.author.id === client.user?.id) return;
     await msgHandler.handleMessage({
       channel: msg.channel.id,
       author: msg.author.id,
