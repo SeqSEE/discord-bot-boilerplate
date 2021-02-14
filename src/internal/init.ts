@@ -21,12 +21,17 @@
  */
 
 import fs from 'fs';
+import path from 'path';
 import dotenv from 'dotenv';
 
-const defaultConfig = './default.env';
-const config = './.env';
-const disabledCommandsFile = './data/disabledcommands.json';
-const adminsFile = './data/admins.json';
+const defaultConfig = path.join(__dirname, 'default.env');
+const config = path.join(__dirname, '.env');
+const disabledCommandsFile = path.join(
+  __dirname,
+  'data',
+  'disabledcommands.json'
+);
+const adminsFile = path.join(__dirname, 'data', 'admins.json');
 
 export default async function init(
   start: (disabled: string[], admins: string[]) => void

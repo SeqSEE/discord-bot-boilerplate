@@ -24,7 +24,6 @@ import CommandRegistry from './CommandRegistry';
 import CommandHandler from './CommandHandler';
 import DiscordHandler from './DiscordHandler';
 import MessageObject from '../interface/MessageObject';
-import { ping } from '../commands/example/ping';
 import { stop } from './commands/operator/stop';
 import { disablecommand } from './commands/admin/disablecommand';
 import { enablecommand } from './commands/admin/enablecommand';

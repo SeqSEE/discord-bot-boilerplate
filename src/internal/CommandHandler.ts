@@ -117,7 +117,7 @@ export default class CommandHandler {
     }
 
     fs.writeFile(
-      path.join(__dirname, '../../data/disabledcommands.json'),
+      path.join(__dirname, '..', '..', 'data', 'disabledcommands.json'),
       JSON.stringify(disabled, null, 2),
       function (err) {
         if (err) {
@@ -151,7 +151,7 @@ export default class CommandHandler {
 
   private saveAdmins(): void {
     fs.writeFile(
-      path.join(__dirname, '../../data/admins.json'),
+      path.join(__dirname, '..', '..', 'data', 'admins.json'),
       JSON.stringify(this.admins, null, 2),
       function (err) {
         if (err) {
