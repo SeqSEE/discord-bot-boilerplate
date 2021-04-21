@@ -26,7 +26,7 @@ import { EmbedFieldData, MessageEmbed, TextChannel } from 'discord.js';
 import CommandHandler from '../../CommandHandler';
 import Command from '../../Command';
 
-export async function help(
+export default async function help(
   discord: DiscordHandler,
   cmdHandler: CommandHandler,
   messageObj: MessageObject

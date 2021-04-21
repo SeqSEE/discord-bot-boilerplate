@@ -24,7 +24,7 @@ import DiscordHandler from '../../DiscordHandler';
 import MessageObject from '../../../interface/MessageObject';
 import { TextChannel } from 'discord.js';
 
-export async function stop(
+export default async function stop(
   discord: DiscordHandler,
   messageObj: MessageObject
 ): Promise<void> {

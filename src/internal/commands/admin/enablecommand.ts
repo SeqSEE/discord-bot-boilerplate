@@ -26,7 +26,7 @@ import { TextChannel } from 'discord.js';
 import CommandHandler from '../../CommandHandler';
 import Command from '../../Command';
 
-export async function enablecommand(
+export default async function enablecommand(
   discord: DiscordHandler,
   cmdHandler: CommandHandler,
   messageObj: MessageObject

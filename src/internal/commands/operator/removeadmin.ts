@@ -25,7 +25,7 @@ import MessageObject from '../../../interface/MessageObject';
 import { TextChannel, User } from 'discord.js';
 import CommandHandler from '../../CommandHandler';
 
-export async function removeadmin(
+export default async function removeadmin(
   discord: DiscordHandler,
   cmdHandler: CommandHandler,
   messageObj: MessageObject

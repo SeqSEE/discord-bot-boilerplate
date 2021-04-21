@@ -25,7 +25,7 @@ import MessageObject from '../../../interface/MessageObject';
 import { TextChannel } from 'discord.js';
 import CommandHandler from '../../CommandHandler';
 
-export async function admins(
+export default async function admins(
   discord: DiscordHandler,
   cmdHandler: CommandHandler,
   messageObj: MessageObject

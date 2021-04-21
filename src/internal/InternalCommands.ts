@@ -24,14 +24,14 @@ import CommandRegistry from './CommandRegistry';
 import CommandHandler from './CommandHandler';
 import DiscordHandler from './DiscordHandler';
 import MessageObject from '../interface/MessageObject';
-import { stop } from './commands/operator/stop';
-import { disablecommand } from './commands/admin/disablecommand';
-import { enablecommand } from './commands/admin/enablecommand';
+import stop from './commands/operator/stop';
+import disablecommand from './commands/admin/disablecommand';
+import enablecommand from './commands/admin/enablecommand';
 import MessageHandler from './MessageHandler';
-import { help } from './commands/default/help';
-import { addadmin } from './commands/operator/addadmin';
-import { removeadmin } from './commands/operator/removeadmin';
-import { admins } from './commands/operator/admins';
+import help from './commands/default/help';
+import addadmin from './commands/operator/addadmin';
+import removeadmin from './commands/operator/removeadmin';
+import admins from './commands/operator/admins';
 
 export default class InternalCommands extends CommandRegistry {
   constructor(
