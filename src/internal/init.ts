@@ -24,8 +24,8 @@ import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
 
-const defaultConfig = path.join(__dirname, 'default.env');
-const config = path.join(__dirname, '.env');
+const defaultConfig = path.join(__dirname, '..', '..', 'default.env');
+const config = path.join(__dirname, '..', '..', '.env');
 const disabledCommandsFile = path.join(
   __dirname,
   'data',
