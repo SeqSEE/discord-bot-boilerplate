@@ -28,10 +28,12 @@ const defaultConfig = path.join(__dirname, '..', '..', 'default.env');
 const config = path.join(__dirname, '..', '..', '.env');
 const disabledCommandsFile = path.join(
   __dirname,
+  '..',
+  '..',
   'data',
   'disabledcommands.json'
 );
-const adminsFile = path.join(__dirname, 'data', 'admins.json');
+const adminsFile = path.join(__dirname, '..', '..', 'data', 'admins.json');
 
 export default async function init(
   start: (disabled: string[], admins: string[]) => void
