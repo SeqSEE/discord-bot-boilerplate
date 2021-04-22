@@ -38,7 +38,7 @@ export default class MessageHandler {
     author: string;
     content: string;
   }) {
-    let m = msgObj.content.split(' ');
+    let m = msgObj.content.split(/\s+/);
     if (m[0].length > this.commandHandler.getCmdPrefix().length - 1) {
       if (m[0].startsWith(this.commandHandler.getCmdPrefix())) {
         if (this.commandHandler) {
