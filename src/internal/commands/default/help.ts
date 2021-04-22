@@ -68,9 +68,7 @@ export default async function help(
     else if (user) user.send(helpEmbed);
   } else {
     const command = m[1];
-    const cmd: Command | undefined = cmdHandler.getCommand(
-      `${cmdHandler.getCmdPrefix()}${command}`
-    );
+    const cmd: Command | undefined = cmdHandler.getCommand(`${command}`);
     if (cmd) {
       if (chan)
         chan.send(`Usage:\n${cmdHandler.getCmdPrefix()}${cmd.getUsage()}`);
