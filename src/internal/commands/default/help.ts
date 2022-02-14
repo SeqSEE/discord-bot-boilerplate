@@ -22,7 +22,7 @@
 
 import DiscordHandler from '../../DiscordHandler';
 import MessageObject from '../../../interface/MessageObject';
-import { EmbedFieldData, MessageEmbed, TextChannel } from 'discord.js';
+import {EmbedFieldData, MessageEmbed, TextChannel} from 'discord.js';
 import CommandHandler from '../../CommandHandler';
 import Command from '../../Command';
 
@@ -64,8 +64,8 @@ export default async function help(
     },
   });
   if (m.length < 2) {
-    if (chan) chan.send(helpEmbed);
-    else if (user) user.send(helpEmbed);
+    if (chan) chan.send({embeds: [helpEmbed]});
+    else if (user) user.send({embeds: [helpEmbed]});
   } else {
     const command = m[1];
     const cmd: Command | undefined = cmdHandler.getCommand(`${command}`);

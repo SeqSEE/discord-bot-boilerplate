@@ -22,7 +22,14 @@
 
 import init from './internal/init';
 import dotenv from 'dotenv';
-import { Client, TextChannel, PresenceData, Message } from 'discord.js';
+import {
+  Client,
+  TextChannel,
+  PresenceData,
+  Message,
+  Intents,
+  ClientOptions,
+} from 'discord.js';
 import DiscordHandler from './internal/DiscordHandler';
 import CommandHandler from './internal/CommandHandler';
 import MessageHandler from './internal/MessageHandler';
@@ -30,7 +37,15 @@ import Commands from './Commands';
 
 let start = async (disabled: string[], admins: string[]) => {
   const envConf = dotenv.config();
-  const client: Client = new Client();
+  const options: ClientOptions = {
+    intents: [
+      Intents.FLAGS.DIRECT_MESSAGES,
+      Intents.FLAGS.GUILDS,
+      Intents.FLAGS.GUILD_MESSAGES,
+    ],
+    partials: ['CHANNEL'],
+  };
+  const client: Client = new Client(options);
   const discord: DiscordHandler = new DiscordHandler(client);
   const cmdHandler: CommandHandler = new CommandHandler(
     <string>process.env.CMD_PREFIX,
@@ -49,7 +64,7 @@ let start = async (disabled: string[], admins: string[]) => {
   }
 
   client.on('ready', async () => {
-    if (((process.env.DEBUG as unknown) as number) === 1)
+    if ((process.env.DEBUG as unknown as number) === 1)
       console.log(`Logged in as ${client.user!.tag}!`);
     let chan: TextChannel | null =
       (await client.channels.fetch(
@@ -65,20 +80,20 @@ let start = async (disabled: string[], admins: string[]) => {
           Date.now() / 1000
         )}`
       );
-    client
-      .user!.setStatus('online')
-      .catch(console.log)
-      .then(() => {
-        if (((process.env.DEBUG as unknown) as number) === 1) console.log;
-        discord.util.setStatus({
-          status: 'online',
-          activity: {
-            name: 'Like a BOT',
-            type: 'PLAYING',
-          },
-          afk: true,
-        } as PresenceData);
-      });
+    try {
+      client.user!.setStatus('online');
+      if ((process.env.DEBUG as unknown as number) === 1) console.log;
+      discord.util.setStatus({
+        status: 'online',
+        activity: {
+          name: 'Like a BOT',
+          type: 'PLAYING',
+        },
+        afk: true,
+      } as PresenceData);
+    } catch (e) {
+      console.log;
+    }
   });
   client.on('message', async (msg: Message) => {
     if (msg.author.id === client.user?.id) return;
