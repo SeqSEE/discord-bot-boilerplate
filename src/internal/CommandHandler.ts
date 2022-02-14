@@ -62,17 +62,14 @@ export default class CommandHandler {
         );
         this.commands.push(`${command}`);
         for (let alias of aliases) {
+          const subaliases = aliases.filter((e) => e !== `${alias}`);
+          subaliases.push(command);
           if (this.commandsMap.has(`${alias}`)) {
             throw new Error(`${alias} is already registered as a command`);
           } else {
             this.commandsMap.set(
               `${alias}`,
-              new Command(
-                `${alias}`,
-                usage,
-                aliases.filter((e) => e !== `${alias}`),
-                handler
-              )
+              new Command(`${alias}`, usage, subaliases, handler)
             );
           }
         }
@@ -111,7 +108,7 @@ export default class CommandHandler {
     let disabled: string[] = [];
     for (let c of this.getCommands()) {
       const command = this.getCommandsMap().get(c);
-      if (command && command.isEnabled()) {
+      if (command && !command.isEnabled()) {
         disabled.push(command.getName());
       }
     }

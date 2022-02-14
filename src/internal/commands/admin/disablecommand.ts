@@ -22,7 +22,7 @@
 
 import DiscordHandler from '../../DiscordHandler';
 import MessageObject from '../../../interface/MessageObject';
-import { TextChannel } from 'discord.js';
+import {TextChannel} from 'discord.js';
 import Command from '../../Command';
 import CommandHandler from '../../CommandHandler';
 
@@ -63,6 +63,19 @@ export default async function disablecommand(
         cmdHandler.protectedCommands.indexOf(cmd.getName()) === -1 &&
         cmd.isEnabled()
       ) {
+        for (const alias of cmd.getAliases()) {
+          if (cmdHandler.protectedCommands.indexOf(alias) > -1) {
+            if (chan)
+              chan.send(
+                `Error: Cannot disable ${cmdHandler.getCmdPrefix()}${command}\nEither it is already disabled or unable to be disabled.`
+              );
+            else if (user)
+              user.send(
+                `Error: Cannot disable ${cmdHandler.getCmdPrefix()}${command}\nEither it is already disabled or unable to be disabled.`
+              );
+            return;
+          }
+        }
         cmdHandler.setCommandEnabled(cmd, false);
         if (chan) chan.send(`Disabled ${cmdHandler.getCmdPrefix()}${command}`);
         else if (user)

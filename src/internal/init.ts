@@ -26,14 +26,9 @@ import dotenv from 'dotenv';
 
 const defaultConfig = path.join(__dirname, '..', '..', 'default.env');
 const config = path.join(__dirname, '..', '..', '.env');
-const disabledCommandsFile = path.join(
-  __dirname,
-  '..',
-  '..',
-  'data',
-  'disabledcommands.json'
-);
-const adminsFile = path.join(__dirname, '..', '..', 'data', 'admins.json');
+const dataDir = path.join(__dirname, '..', '..', 'data');
+const disabledCommandsFile = path.join(dataDir, 'disabledcommands.json');
+const adminsFile = path.join(dataDir, 'admins.json');
 
 export default async function init(
   start: (disabled: string[], admins: string[]) => void
@@ -43,7 +38,7 @@ export default async function init(
   try {
     if (fs.existsSync(config)) {
       const envConf = dotenv.config();
-      if (((process.env.DEBUG as unknown) as number) === 1)
+      if ((process.env.DEBUG as unknown as number) === 1)
         console.log(`Found .env configuration file`);
       let s: (disabled: string[], admins: string[]) => void;
 
@@ -80,16 +75,21 @@ export default async function init(
       } else {
         s = start;
 
-        if (fs.existsSync(adminsFile)) {
-          admins = JSON.parse(fs.readFileSync(adminsFile).toString('utf8'));
+        if (!fs.existsSync(dataDir)) {
+          fs.mkdirSync(dataDir);
         }
-        if (fs.existsSync(disabledCommandsFile)) {
-          disabled = JSON.parse(
-            fs.readFileSync(disabledCommandsFile).toString('utf8')
-          );
-          if (((process.env.DEBUG as unknown) as number) === 1)
-            console.log(`Disabled commands:\n ${disabled}`);
+        if (!fs.existsSync(adminsFile)) {
+          fs.writeFileSync(adminsFile, '[]');
         }
+        admins = JSON.parse(fs.readFileSync(adminsFile).toString('utf8'));
+
+        if (!fs.existsSync(disabledCommandsFile)) {
+          fs.writeFileSync(disabledCommandsFile, '[]');
+        }
+        disabled = JSON.parse(
+          fs.readFileSync(disabledCommandsFile).toString('utf8')
+        );
+
         s(disabled, admins);
       }
     } else {

@@ -59,7 +59,7 @@ let start = async (disabled: string[], admins: string[]) => {
     if (cmd) {
       cmd.setEnabled(false);
       if (Number(process.env.DEBUG as unknown) === 1)
-        console.log(`Disabled ${cmd.getName}`);
+        console.log(`Disabled ${cmd.getName()}`);
     }
   }
 
