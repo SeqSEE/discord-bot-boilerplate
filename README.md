@@ -4,7 +4,7 @@ A simple TypeScript boilerplate for a Discord bot.
 
 ### Prerequisites
 
-- [NodeJS 14+](https://nodejs.org/en/download/)
+- [NodeJS 16.6+](https://nodejs.org/en/download/)
 - [TypeScript](https://www.typescriptlang.org/#installation)
 
 ### Setup
