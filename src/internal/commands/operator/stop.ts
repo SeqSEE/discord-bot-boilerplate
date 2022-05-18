@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Cryptech Services
+ * Copyright 2020-2021 Cryptech Services
  *
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,7 @@ import DiscordHandler from '../../DiscordHandler';
 import MessageObject from '../../../interface/MessageObject';
 import { TextChannel } from 'discord.js';
 
-export async function stop(
+export default async function stop(
   discord: DiscordHandler,
   messageObj: MessageObject
 ): Promise<void> {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Cryptech Services
+ * Copyright 2020-2021 Cryptech Services
  *
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,6 @@
  */
 
 import CommandHandler from './CommandHandler';
-import Command from './Command';
 
 export default class MessageHandler {
   private commandHandler: CommandHandler;
@@ -34,22 +33,24 @@ export default class MessageHandler {
     return this.commandHandler;
   }
 
-  public handleMessage(msgObj: {
+  public async handleMessage(msgObj: {
     channel: string;
     author: string;
     content: string;
   }) {
-    let m = msgObj.content.split(' ');
-    if (m.length > this.commandHandler.getCmdPrefix().length - 1) {
-      if (this.commandHandler) {
-        const command = this.commandHandler.getCommand(
-          m[0]
-            .toLowerCase()
-            .substring(this.commandHandler.getCmdPrefix().length)
-        );
-        if (command) {
-          if (command.isEnabled()) {
-            command.execute(msgObj);
+    let m = msgObj.content.split(/\s+/);
+    if (m[0].length > this.commandHandler.getCmdPrefix().length - 1) {
+      if (m[0].startsWith(this.commandHandler.getCmdPrefix())) {
+        if (this.commandHandler) {
+          const command = this.commandHandler.getCommand(
+            m[0]
+              .toLowerCase()
+              .substring(this.commandHandler.getCmdPrefix().length)
+          );
+          if (command) {
+            if (command.isEnabled()) {
+              command.execute(msgObj);
+            }
           }
         }
       }

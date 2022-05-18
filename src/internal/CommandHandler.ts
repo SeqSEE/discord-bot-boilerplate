@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Cryptech Services
+ * Copyright 2020-2021 Cryptech Services
  *
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -61,21 +61,18 @@ export default class CommandHandler {
           new Command(`${command}`, usage, aliases, handler)
         );
         this.commands.push(`${command}`);
-        aliases.forEach((alias: string) => {
+        for (let alias of aliases) {
+          const subaliases = aliases.filter((e) => e !== `${alias}`);
+          subaliases.push(command);
           if (this.commandsMap.has(`${alias}`)) {
             throw new Error(`${alias} is already registered as a command`);
           } else {
             this.commandsMap.set(
               `${alias}`,
-              new Command(
-                `${alias}`,
-                usage,
-                aliases.filter((e) => e !== `${alias}`),
-                handler
-              )
+              new Command(`${alias}`, usage, subaliases, handler)
             );
           }
-        });
+        }
       }
       if (Number(process.env.DEBUG) === 1)
         console.log(`${Date()} registered new command ${command}`);
@@ -109,13 +106,15 @@ export default class CommandHandler {
 
   private saveDisabledCommands(): void {
     let disabled: string[] = [];
-    this.getCommandsMap().forEach((c) => {
-      if (!c.isEnabled()) {
-        disabled.push(c.getName());
+    for (let c of this.getCommands()) {
+      const command = this.getCommandsMap().get(c);
+      if (command && !command.isEnabled()) {
+        disabled.push(command.getName());
       }
-    });
+    }
+
     fs.writeFile(
-      path.join(__dirname, '../../data/disabledcommands.json'),
+      path.join(__dirname, '..', '..', 'data', 'disabledcommands.json'),
       JSON.stringify(disabled, null, 2),
       function (err) {
         if (err) {
@@ -149,7 +148,7 @@ export default class CommandHandler {
 
   private saveAdmins(): void {
     fs.writeFile(
-      path.join(__dirname, '../../data/admins.json'),
+      path.join(__dirname, '..', '..', 'data', 'admins.json'),
       JSON.stringify(this.admins, null, 2),
       function (err) {
         if (err) {

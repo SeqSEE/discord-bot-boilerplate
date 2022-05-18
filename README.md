@@ -4,15 +4,15 @@ A simple TypeScript boilerplate for a Discord bot.
 
 ### Prerequisites
 
-- [NodeJS 12+](https://nodejs.org/en/download/)
+- [NodeJS 16.6+](https://nodejs.org/en/download/)
 - [TypeScript](https://www.typescriptlang.org/#installation)
 
 ### Setup
 
-- clone the repo
+- [Use this repo as a template](https://github.com/SeqSEE/discord-bot-boilerplate/generate)
 
 ```
-git clone https://github.com/SeqSEE/discord-bot-boilerplate.git
+git clone https://github.com/YOUR-USERNAME/repository-name.git
 ```
 
 - install the dependencies

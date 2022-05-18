@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Cryptech Services
+ * Copyright 2020-2021 Cryptech Services
  *
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -24,15 +24,14 @@ import CommandRegistry from './CommandRegistry';
 import CommandHandler from './CommandHandler';
 import DiscordHandler from './DiscordHandler';
 import MessageObject from '../interface/MessageObject';
-import { ping } from '../commands/example/ping';
-import { stop } from './commands/operator/stop';
-import { disablecommand } from './commands/admin/disablecommand';
-import { enablecommand } from './commands/admin/enablecommand';
+import stop from './commands/operator/stop';
+import disablecommand from './commands/admin/disablecommand';
+import enablecommand from './commands/admin/enablecommand';
 import MessageHandler from './MessageHandler';
-import { help } from './commands/default/help';
-import { addadmin } from './commands/operator/addadmin';
-import { removeadmin } from './commands/operator/removeadmin';
-import { admins } from './commands/operator/admins';
+import help from './commands/default/help';
+import addadmin from './commands/operator/addadmin';
+import removeadmin from './commands/operator/removeadmin';
+import admins from './commands/operator/admins';
 
 export default class InternalCommands extends CommandRegistry {
   constructor(

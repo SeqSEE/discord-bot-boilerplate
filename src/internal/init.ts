@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Cryptech Services
+ * Copyright 2020-2021 Cryptech Services
  *
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -21,12 +21,14 @@
  */
 
 import fs from 'fs';
+import path from 'path';
 import dotenv from 'dotenv';
 
-const defaultConfig = './default.env';
-const config = './.env';
-const disabledCommandsFile = './data/disabledcommands.json';
-const adminsFile = './data/admins.json';
+const defaultConfig = path.join(__dirname, '..', '..', 'default.env');
+const config = path.join(__dirname, '..', '..', '.env');
+const dataDir = path.join(__dirname, '..', '..', 'data');
+const disabledCommandsFile = path.join(dataDir, 'disabledcommands.json');
+const adminsFile = path.join(dataDir, 'admins.json');
 
 export default async function init(
   start: (disabled: string[], admins: string[]) => void
@@ -36,7 +38,7 @@ export default async function init(
   try {
     if (fs.existsSync(config)) {
       const envConf = dotenv.config();
-      if (((process.env.DEBUG as unknown) as number) === 1)
+      if ((process.env.DEBUG as unknown as number) === 1)
         console.log(`Found .env configuration file`);
       let s: (disabled: string[], admins: string[]) => void;
 
@@ -73,16 +75,21 @@ export default async function init(
       } else {
         s = start;
 
-        if (fs.existsSync(adminsFile)) {
-          admins = JSON.parse(fs.readFileSync(adminsFile).toString('utf8'));
+        if (!fs.existsSync(dataDir)) {
+          fs.mkdirSync(dataDir);
         }
-        if (fs.existsSync(disabledCommandsFile)) {
-          disabled = JSON.parse(
-            fs.readFileSync(disabledCommandsFile).toString('utf8')
-          );
-          if (((process.env.DEBUG as unknown) as number) === 1)
-            console.log(`Disabled commands:\n ${disabled}`);
+        if (!fs.existsSync(adminsFile)) {
+          fs.writeFileSync(adminsFile, '[]');
         }
+        admins = JSON.parse(fs.readFileSync(adminsFile).toString('utf8'));
+
+        if (!fs.existsSync(disabledCommandsFile)) {
+          fs.writeFileSync(disabledCommandsFile, '[]');
+        }
+        disabled = JSON.parse(
+          fs.readFileSync(disabledCommandsFile).toString('utf8')
+        );
+
         s(disabled, admins);
       }
     } else {

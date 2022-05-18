@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Cryptech Services
+ * Copyright 2020-2021 Cryptech Services
  *
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -39,7 +39,7 @@ export default abstract class CommandRegistry {
     this.cmdHandler = cmdHandler;
     this.msgHandler = msgHandler;
   }
-  public abstract async registerCommands(): Promise<void>;
+  public abstract registerCommands(): Promise<void>;
 
   public enableCommand(name: string): void {
     if (this.getCommandHandler().getCommandsMap().has(name)) {

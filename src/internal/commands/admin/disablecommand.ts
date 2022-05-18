@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Cryptech Services
+ * Copyright 2020-2021 Cryptech Services
  *
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -22,11 +22,11 @@
 
 import DiscordHandler from '../../DiscordHandler';
 import MessageObject from '../../../interface/MessageObject';
-import { TextChannel } from 'discord.js';
+import {TextChannel} from 'discord.js';
 import Command from '../../Command';
 import CommandHandler from '../../CommandHandler';
 
-export async function disablecommand(
+export default async function disablecommand(
   discord: DiscordHandler,
   cmdHandler: CommandHandler,
   messageObj: MessageObject
@@ -63,6 +63,19 @@ export async function disablecommand(
         cmdHandler.protectedCommands.indexOf(cmd.getName()) === -1 &&
         cmd.isEnabled()
       ) {
+        for (const alias of cmd.getAliases()) {
+          if (cmdHandler.protectedCommands.indexOf(alias) > -1) {
+            if (chan)
+              chan.send(
+                `Error: Cannot disable ${cmdHandler.getCmdPrefix()}${command}\nEither it is already disabled or unable to be disabled.`
+              );
+            else if (user)
+              user.send(
+                `Error: Cannot disable ${cmdHandler.getCmdPrefix()}${command}\nEither it is already disabled or unable to be disabled.`
+              );
+            return;
+          }
+        }
         cmdHandler.setCommandEnabled(cmd, false);
         if (chan) chan.send(`Disabled ${cmdHandler.getCmdPrefix()}${command}`);
         else if (user)

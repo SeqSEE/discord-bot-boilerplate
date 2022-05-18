@@ -5,17 +5,17 @@
   "main": "dist/index.js",
   "scripts": {
     "clean": "rm -rf dist && rm -rf disabledcommands.json",
-    "build": "tsc",
+    "build": "tsc --listEmittedFiles -p .",
     "start": "node ./dist/index.js > ./dist/debug.log 2> ./dist/error.log"
   },
   "author": "SeqSEE",
   "license": "MIT",
   "dependencies": {
-    "discord.js": "^12.3.1",
-    "dotenv": "^8.2.0"
+    "discord.js": "^13.6.0",
+    "dotenv": "^16.0.0"
   },
   "devDependencies": {
-    "@types/node": "^14.11.2",
-    "@types/ws": "^7.2.6"
+    "@types/node": "^17.0.30",
+    "@types/ws": "^8.2.2"
   }
 }
