@@ -22,7 +22,13 @@
 
 import DiscordHandler from '../../DiscordHandler';
 import MessageObject from '../../../interface/MessageObject';
-import {EmbedFieldData, MessageEmbed, TextChannel} from 'discord.js';
+import {
+  EmbedBuilder,
+  TextChannel,
+  EmbedData,
+  EmbedAuthorData,
+  APIEmbedField,
+} from 'discord.js';
 import CommandHandler from '../../CommandHandler';
 import Command from '../../Command';
 
@@ -36,7 +42,7 @@ export default async function help(
   let chan: TextChannel | null =
     c instanceof TextChannel ? (c as TextChannel) : null;
   let m = messageObj.content.split(/\s+/);
-  let fields: EmbedFieldData[] = [];
+  let fields: APIEmbedField[] = [];
   cmdHandler.getCommands().map((cmd) => {
     let command = cmdHandler.getCommand(cmd);
     if (command && command.isEnabled()) {
@@ -44,12 +50,12 @@ export default async function help(
       return command.getHelpSection();
     }
   });
-  let helpEmbed = new MessageEmbed({
+  let helpEmbedData: EmbedData = {
     color: 8359053,
     author: {
       name: process.env.BOT_NAME as string,
       icon_url: process.env.ICON_URL as string,
-    },
+    } as EmbedAuthorData,
     title: `**HELP**`,
     url: '',
     description: `** **`,
@@ -62,7 +68,8 @@ export default async function help(
       iconURL: process.env.ICON_URL as string,
       text: process.env.BOT_NAME as string,
     },
-  });
+  };
+  const helpEmbed = new EmbedBuilder(helpEmbedData);
   if (m.length < 2) {
     if (chan) chan.send({embeds: [helpEmbed]});
     else if (user) user.send({embeds: [helpEmbed]});

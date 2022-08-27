@@ -11,11 +11,11 @@
   "author": "SeqSEE",
   "license": "MIT",
   "dependencies": {
-    "discord.js": "^13.7.0",
+    "discord.js": "^14.3.0",
     "dotenv": "^16.0.1"
   },
   "devDependencies": {
-    "@types/node": "^17.0.35",
+    "@types/node": "^18.7.13",
     "@types/ws": "^8.2.2"
   }
 }
