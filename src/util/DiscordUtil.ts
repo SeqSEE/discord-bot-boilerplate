@@ -27,7 +27,7 @@ import {
   TextChannel,
   Collection,
   Message,
-  ChannelLogsQueryOptions,
+  FetchMessagesOptions,
 } from 'discord.js';
 
 export default class DiscordUtil {
@@ -45,7 +45,7 @@ export default class DiscordUtil {
 
   public setStatus(data: PresenceData): void {
     this.getClient().user!.setPresence(data);
-    if (((process.env.DEBUG as unknown) as number) === 1)
+    if ((process.env.DEBUG as unknown as number) === 1)
       console.log(`${Date()} setStatus(${JSON.stringify(data)}: PresenceData)`);
   }
 
@@ -108,14 +108,12 @@ export default class DiscordUtil {
       let rounds = limit / 100 + (limit % 100 ? 1 : 0);
       let last_id: string = '';
       for (let x = 0; x < rounds; x++) {
-        const options: ChannelLogsQueryOptions = { limit: 100 };
+        const options: FetchMessagesOptions = {limit: 100};
         if (last_id.length > 0) {
           options.before = last_id;
         }
-        const messages: Collection<
-          string,
-          Message
-        > = await channel.messages.fetch(options);
+        const messages: Collection<string, Message> =
+          await channel.messages.fetch(options);
         for (let m of messages.keys()) {
           const message = messages.get(m);
           if (message) {
