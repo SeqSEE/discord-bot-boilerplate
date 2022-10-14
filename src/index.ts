@@ -43,6 +43,7 @@ let start = async (disabled: string[], admins: string[]) => {
       IntentsBitField.Flags.DirectMessages,
       IntentsBitField.Flags.Guilds,
       IntentsBitField.Flags.GuildMessages,
+      IntentsBitField.Flags.MessageContent
     ],
     partials: [Partials.Channel],
   };
