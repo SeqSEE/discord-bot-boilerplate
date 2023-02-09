@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2021 Cryptech Services
+ * Copyright 2020-2023 Cryptech Services
  *
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -22,16 +22,30 @@
 
 import DiscordHandler from '../../internal/DiscordHandler';
 import MessageObject from '../../interface/MessageObject';
-import { TextChannel } from 'discord.js';
+import {TextChannel} from 'discord.js';
 
+/**
+ * The ping command is a simple example command which responds to ping command with pong
+ *
+ * @param discord the instance of the {@link DiscordHandler}
+ * @param messageObj the {@link MessageObject} that triggered the command
+ * @returns {Promise<void>}
+ */
 export async function ping(
   discord: DiscordHandler,
   messageObj: MessageObject
 ): Promise<void> {
+  // fetch the user (if it was a DM)
   let user = await discord.getClient().users.fetch(`${messageObj.author}`);
+
+  // fetch the channel (if it was a DM)
   let c = await discord.getClient().channels.fetch(messageObj.channel);
+
+  // check that c is an instance of TextChannel
   let chan: TextChannel | null =
     c instanceof TextChannel ? (c as TextChannel) : null;
+
+  // if it's a channel send response channel otherwise assume it is a DM and send response there
   if (chan) chan.send('pong!');
   else if (user) user.send('pong!');
 }

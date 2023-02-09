@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2021 Cryptech Services
+ * Copyright 2020-2023 Cryptech Services
  *
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -43,7 +43,7 @@ let start = async (disabled: string[], admins: string[]) => {
       IntentsBitField.Flags.DirectMessages,
       IntentsBitField.Flags.Guilds,
       IntentsBitField.Flags.GuildMessages,
-      IntentsBitField.Flags.MessageContent
+      IntentsBitField.Flags.MessageContent,
     ],
     partials: [Partials.Channel],
   };
