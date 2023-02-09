@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2021 Cryptech Services
+ * Copyright 2020-2023 Cryptech Services
  *
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -33,6 +33,10 @@ import addadmin from './commands/operator/addadmin';
 import removeadmin from './commands/operator/removeadmin';
 import admins from './commands/operator/admins';
 
+/**
+ * The Commands class extends the abstract {@link CommandRegistry} and is where internal commands are registered.
+ * @class
+ */
 export default class InternalCommands extends CommandRegistry {
   constructor(
     discord: DiscordHandler,
@@ -41,6 +45,11 @@ export default class InternalCommands extends CommandRegistry {
   ) {
     super(discord, cmdHandler, msgHandler);
   }
+
+  /**
+   * Register commands with the {@link CommandHandler}
+   * @returns {Promise<void>}
+   */
   public async registerCommands(): Promise<void> {
     this.registerCommand(
       'stop',

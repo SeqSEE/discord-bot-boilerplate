@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2021 Cryptech Services
+ * Copyright 2020-2023 Cryptech Services
  *
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -43,17 +43,17 @@ export default abstract class CommandRegistry {
 
   public enableCommand(name: string): void {
     if (this.getCommandHandler().getCommandsMap().has(name)) {
-      (this.getCommandHandler()
-        .getCommandsMap()
-        .get(name) as Command).setEnabled(true);
+      (
+        this.getCommandHandler().getCommandsMap().get(name) as Command
+      ).setEnabled(true);
     }
   }
 
   public disableCommand(name: string): void {
     if (this.getCommandHandler().getCommandsMap().has(name)) {
-      (this.getCommandHandler()
-        .getCommandsMap()
-        .get(name) as Command).setEnabled(false);
+      (
+        this.getCommandHandler().getCommandsMap().get(name) as Command
+      ).setEnabled(false);
     }
   }
 
